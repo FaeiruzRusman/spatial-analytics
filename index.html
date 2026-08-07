@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>SUO Spatial Analytics Engine v4.0 FINAL</title>
+<title>SUO Spatial Analytics Engine v4.1 DATA</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
 :root{
@@ -101,7 +101,7 @@ button,input,select{font:inherit} button{cursor:pointer}
 <body>
 <div id="app">
 <aside class="left">
-  <div class="brand"><div class="brandmark">SUO</div><div><h1>Spatial Analytics Engine</h1><p>Selangor Urban Observatory · Enterprise Final v4.0</p></div></div>
+  <div class="brand"><div class="brandmark">SUO</div><div><h1>Spatial Analytics Engine</h1><p>Selangor Urban Observatory · Enterprise Data v4.1</p></div></div>
   <div class="left-tabs">
     <button class="left-tab active" data-left="library">Analysis Library</button>
     <button class="left-tab" data-left="data">Data Manager</button>
@@ -112,6 +112,7 @@ button,input,select{font:inherit} button{cursor:pointer}
     <input id="analysisSearch" class="search" placeholder="Search analysis..."/>
     <div class="group"><div class="group-title">DEMOGRAPHY</div>
       <button class="tool active" data-analysis="population-density"><span class="tool-icon">PD</span><span><b>Population Density</b><small>Grid concentration analysis</small></span><span class="info-btn" data-info="population-density">ⓘ</span></button>
+      <button class="tool" data-analysis="dosm-district-population"><span class="tool-icon">DM</span><span><b>DOSM District Population</b><small>Live official district statistics</small></span><span class="info-btn" data-info="dosm-district-population">ⓘ</span></button>
       <button class="tool disabled"><span class="tool-icon">PG</span><span><b>Population Growth</b><small>Planned module</small></span></button>
       <button class="tool disabled"><span class="tool-icon">PP</span><span><b>Population Projection</b><small>Planned module</small></span></button>
     </div>
@@ -142,9 +143,16 @@ button,input,select{font:inherit} button{cursor:pointer}
     <div class="mini-card"><h4>Enterprise Data Sources</h4>
       <div class="data-row"><span>Population Demo</span><em class="ok">Ready</em></div>
       <div class="data-row"><span>Facility Demo</span><em class="ok">Ready</em></div>
-      <div class="data-row"><span>DOSM Population</span><em>Not linked</em></div>
-      <div class="data-row"><span>PBT Boundary</span><em>Not linked</em></div>
+      <div class="data-row"><span>OpenDOSM District Population</span><em id="dosmSourceStatus">Not synced</em></div>
+      <div class="data-row"><span>District Geometry</span><em>Centroid proxy</em></div>
+      <div class="data-row"><span>PBT Boundary</span><em>Pending verified layer</em></div>
       <div class="data-row"><span>SUO Data Hub API</span><em>Not linked</em></div>
+    </div>
+    <button id="syncDOSMBtn" style="width:100%;padding:9px;border-radius:8px;border:1px solid #315f7c;background:#0d2a3f;color:#e8f5fc;font-size:8px;margin-bottom:8px">Sync OpenDOSM Population</button>
+    <div class="mini-card"><h4>OpenDOSM Sync</h4>
+      <div class="data-row"><span>Status</span><em id="dosmSyncText">Waiting</em></div>
+      <div class="data-row"><span>Latest Year</span><em id="dosmLatestYear">—</em></div>
+      <div class="data-row"><span>Selangor Districts</span><em id="dosmDistrictCount">—</em></div>
     </div>
   </div>
 
@@ -257,10 +265,29 @@ button,input,select{font:inherit} button{cursor:pointer}
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@turf/turf@7/turf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <script>
 (() => {
 "use strict";
-const CONFIG={version:"4.0 FINAL",bbox:[100.95,2.62,101.95,3.83],home:[3.18,101.53],zoom:8,geoportalUrl:""};
+const CONFIG={
+ version:"4.1 DATA",
+ bbox:[100.95,2.62,101.95,3.83],
+ home:[3.18,101.53],
+ zoom:8,
+ geoportalUrl:"",
+ dosmDistrictCSV:"https://storage.dosm.gov.my/population/population_district.csv"
+};
+const DISTRICT_CENTROIDS={
+ "Gombak":[101.67,3.27],
+ "Hulu Langat":[101.82,3.03],
+ "Hulu Selangor":[101.63,3.58],
+ "Klang":[101.39,3.05],
+ "Kuala Langat":[101.48,2.84],
+ "Kuala Selangor":[101.28,3.34],
+ "Petaling":[101.56,3.10],
+ "Sabak Bernam":[101.10,3.70],
+ "Sepang":[101.69,2.73]
+};
 const COLORS={1:"#2563eb",2:"#22c55e",3:"#f59e0b",4:"#ef4444"};
 const $=id=>document.getElementById(id), sleep=ms=>new Promise(r=>setTimeout(r,ms)), rnd=(a,b)=>a+Math.random()*(b-a);
 
@@ -281,12 +308,124 @@ const facilities=turf.featureCollection(Array.from({length:81},(_,i)=>{const typ
 dataManager.register("population",{name:"Population Demo",type:"Point GeoJSON",status:"Ready",geojson:population});
 dataManager.register("facilities",{name:"Facilities Demo",type:"Point GeoJSON",status:"Ready",geojson:facilities});
 
+let dosmDistrictRows=[];
+let dosmDistrictGeoJSON=null;
+let dosmDistrictLayer=null;
+
+function makeDOSMGeoJSON(rows){
+ const features=[];
+ rows.forEach(r=>{
+   const c=DISTRICT_CENTROIDS[r.district];
+   if(!c)return;
+   features.push(turf.point(c,{
+     district:r.district,
+     population_thousand:Number(r.population),
+     population:Number(r.population)*1000,
+     date:r.date,
+     source:"Department of Statistics Malaysia / OpenDOSM",
+     geometry_note:"Representative district centroid for visualisation only"
+   }));
+ });
+ return turf.featureCollection(features);
+}
+
+async function syncOpenDOSM(showToast=true){
+ const status=document.getElementById("dosmSourceStatus");
+ const syncText=document.getElementById("dosmSyncText");
+ try{
+   if(status){status.textContent="Syncing...";status.className="";}
+   if(syncText)syncText.textContent="Downloading";
+   const response=await fetch(CONFIG.dosmDistrictCSV,{cache:"no-store"});
+   if(!response.ok)throw new Error("HTTP "+response.status);
+   const text=await response.text();
+   const parsed=Papa.parse(text,{header:true,skipEmptyLines:true,dynamicTyping:false});
+   if(parsed.errors && parsed.errors.length && !parsed.data.length)throw new Error(parsed.errors[0].message);
+   const sel=parsed.data.filter(r=>
+     String(r.state||"").trim().toLowerCase()==="selangor" &&
+     String(r.sex||"").trim().toLowerCase()==="both" &&
+     String(r.age||"").trim().toLowerCase()==="overall" &&
+     String(r.ethnicity||"").trim().toLowerCase()==="overall"
+   );
+   const dates=[...new Set(sel.map(r=>r.date).filter(Boolean))].sort();
+   const latest=dates[dates.length-1];
+   dosmDistrictRows=sel.filter(r=>r.date===latest).map(r=>({
+     date:r.date,
+     state:r.state,
+     district:r.district,
+     population:Number(r.population)
+   })).filter(r=>Number.isFinite(r.population));
+
+   dosmDistrictGeoJSON=makeDOSMGeoJSON(dosmDistrictRows);
+   dataManager.register("dosm-district-population",{
+     name:"OpenDOSM Selangor District Population",
+     type:"Official tabular data + centroid visualisation",
+     status:"Live",
+     geojson:dosmDistrictGeoJSON,
+     rows:dosmDistrictRows,
+     sourceUrl:CONFIG.dosmDistrictCSV,
+     latestDate:latest
+   });
+   if(status){status.textContent="Live";status.className="ok";}
+   if(syncText){syncText.textContent="Synced";syncText.className="ok";}
+   if(document.getElementById("dosmLatestYear"))document.getElementById("dosmLatestYear").textContent=(latest||"—").slice(0,4);
+   if(document.getElementById("dosmDistrictCount"))document.getElementById("dosmDistrictCount").textContent=dosmDistrictRows.length;
+   renderLayers();
+   if(showToast)toast("OpenDOSM Selangor population synced.");
+   return true;
+ }catch(err){
+   console.error("OpenDOSM sync failed",err);
+   if(status)status.textContent="Sync failed";
+   if(syncText)syncText.textContent="Unavailable";
+   if(showToast)toast("OpenDOSM sync failed. Demo engine remains available.");
+   return false;
+ }
+}
+
 /* History */
 class HistoryManager{constructor(key){this.key=key;this.items=this.load()}load(){try{return JSON.parse(localStorage.getItem(this.key))||[]}catch(e){return[]}}save(){localStorage.setItem(this.key,JSON.stringify(this.items.slice(0,30)))}add(item){this.items.unshift(item);this.items=this.items.slice(0,30);this.save()}clear(){this.items=[];this.save()}}
 const historyManager=new HistoryManager("suoSpatialV4History");
 
 /* Modules */
 const modules={
+ "dosm-district-population":{
+   label:"DOSM District Population",
+   subtitle:"Explore official OpenDOSM population statistics for Selangor administrative districts.",
+   info:{
+     purpose:"Use official DOSM administrative-district population statistics inside SUO Spatial Analytics.",
+     input:"OpenDOSM Population Table: Administrative Districts",
+     output:"District population ranking, statistics and representative centroid map",
+     method:"Live CSV sync + official total-population filtering (both sexes, overall age, overall ethnicity)",
+     planning:"District comparison, strategic demographic screening and linkage to future verified district polygons"
+   },
+   inputs:()=>`<div class="chip"><span>Official Dataset</span><em>OpenDOSM</em></div><div class="chip"><span>Geography</span><em>Selangor Districts</em></div><div class="chip"><span>Geometry</span><em>Centroid Proxy</em></div>`,
+   params:()=>`<label>Statistic<select id="pDOSMStat"><option value="population">Total Population</option></select></label><label>Spatial Display<select><option>District Centroid Symbols</option></select></label>`,
+   async run(){
+     const start=performance.now();
+     if(!dosmDistrictRows.length){
+       const ok=await syncOpenDOSM(false);
+       if(!ok||!dosmDistrictRows.length)throw new Error("OpenDOSM data unavailable");
+     }
+     const gj=dosmDistrictGeoJSON;
+     const vals=gj.features.map(f=>Number(f.properties.population||0));
+     const sorted=[...vals].sort((a,b)=>a-b);
+     gj.features.forEach(f=>f.properties.class=quantileClass(vals,Number(f.properties.population||0)));
+     const total=vals.reduce((a,b)=>a+b,0);
+     const critical=gj.features.filter(f=>f.properties.class===4).length;
+     const top=[...gj.features].sort((a,b)=>b.properties.population-a.properties.population)[0];
+     const latest=dataManager.get("dosm-district-population").latestDate;
+     return resultBase(this,gj,total,null,critical,performance.now()-start,
+       {
+         "Official Data Year":(latest||"").slice(0,4),
+         "Selangor Districts":gj.features.length,
+         "Total Selangor Population":Math.round(total).toLocaleString(),
+         "Highest Population District":top?top.properties.district:"—",
+         "Highest District Population":top?Math.round(top.properties.population).toLocaleString():"—"
+       },
+       `Official OpenDOSM district statistics indicate the highest population concentration among Selangor administrative districts is in ${top?top.properties.district:"the leading district"}. This module is suitable for strategic district comparison. Spatial symbols currently use representative centroids only; verified district polygons should be connected before area-based density or statutory boundary analysis.`,
+       ["Connect verified Selangor district boundary polygons","Join DOSM records to district geometry by district name/code","Add year comparison for population growth 2020–2024"],
+       "Official OpenDOSM district population table + representative centroid visualisation");
+   }
+ },
  "population-density":{
    label:"Population Density",subtitle:"Analyse population concentration using spatial grid units.",
    info:{purpose:"Identify concentration of population using configurable spatial grid units.",input:"Population point/grid data",output:"Density grid with Low–Critical classes",method:"Spatial aggregation + quartile classification",planning:"Infrastructure capacity, facility demand, development pressure"},
@@ -342,7 +481,25 @@ let measureMode=false,measurePts=[],measureLine=null;
 map.on("click",e=>{if(!measureMode)return;measurePts.push([e.latlng.lng,e.latlng.lat]);if(measurePts.length===2){const line=turf.lineString(measurePts),km=turf.length(line,{units:"kilometers"});if(measureLine)map.removeLayer(measureLine);measureLine=L.polyline(measurePts.map(p=>[p[1],p[0]]),{color:"#ffd166",weight:3}).addTo(map);$("measureBox").textContent="Distance: "+km.toFixed(2)+" km · click MEA to exit";measurePts=[]}});
 
 function clearMapResults(){[resultLayer,facilityLayer,bufferLayer].forEach(l=>{if(l&&map.hasLayer(l))map.removeLayer(l)});resultLayer=facilityLayer=bufferLayer=null}
-function renderMapResult(r){clearMapResults();resultLayer=L.geoJSON(r.geojson,{style:f=>({color:"#d9edff",weight:.35,fillColor:COLORS[f.properties.class]||"#64748b",fillOpacity:.58}),onEachFeature:(f,l)=>{const p=f.properties;l.bindPopup(`<b>Analysis Unit</b><br>Population: ${Number(p.population||0).toLocaleString()}<br>Class: ${p.class||"-"}${p.score!==undefined?`<br>Score: ${Number(p.score).toFixed(2)}`:""}`)}}).addTo(map);if(r.buffer)bufferLayer=L.geoJSON(r.buffer,{style:{color:"#38bdf8",weight:2,fillOpacity:.04}}).addTo(map);if(r.facilities)facilityLayer=L.geoJSON(r.facilities,{pointToLayer:(f,ll)=>L.circleMarker(ll,{radius:5,color:"#0ea5e9",weight:2,fillColor:"#fff",fillOpacity:1})}).addTo(map)}
+function renderMapResult(r){
+ clearMapResults();
+ resultLayer=L.geoJSON(r.geojson,{
+   style:f=>({color:"#d9edff",weight:.35,fillColor:COLORS[f.properties.class]||"#64748b",fillOpacity:.58}),
+   pointToLayer:(f,ll)=>{
+     const pop=Number(f.properties.population||0);
+     const radius=Math.max(9,Math.min(27,Math.sqrt(pop/100000)*8));
+     return L.circleMarker(ll,{radius,color:"#eaf6ff",weight:1.2,fillColor:COLORS[f.properties.class]||"#43b8ff",fillOpacity:.78});
+   },
+   onEachFeature:(f,l)=>{
+     const p=f.properties;
+     const title=p.district?`<b>${p.district}</b>`:`<b>Analysis Unit</b>`;
+     l.bindPopup(`${title}<br>Population: ${Number(p.population||0).toLocaleString()}<br>Class: ${p.class||"-"}${p.date?`<br>Year: ${String(p.date).slice(0,4)}`:""}${p.geometry_note?`<br><small>${p.geometry_note}</small>`:""}${p.score!==undefined?`<br>Score: ${Number(p.score).toFixed(2)}`:""}`);
+   }
+ }).addTo(map);
+ if(r.buffer)bufferLayer=L.geoJSON(r.buffer,{style:{color:"#38bdf8",weight:2,fillOpacity:.04}}).addTo(map);
+ if(r.facilities)facilityLayer=L.geoJSON(r.facilities,{pointToLayer:(f,ll)=>L.circleMarker(ll,{radius:5,color:"#0ea5e9",weight:2,fillColor:"#fff",fillOpacity:1})}).addTo(map);
+ if(r.type==="dosm-district-population" && resultLayer.getBounds().isValid())map.fitBounds(resultLayer.getBounds(),{padding:[25,25]});
+}
 function renderResultUI(r){
  $("kpiPopulation").textContent=compact(r.total);$("kpiCoverage").textContent=r.coverage==null?"—":r.coverage.toFixed(1)+"%";$("kpiCritical").textContent=r.critical.toLocaleString();$("kpiUnits").textContent=r.units.toLocaleString();$("kpiExecution").textContent=r.executionMs+" ms";
  $("statistics").innerHTML=Object.entries(r.statistics).map(([k,v])=>`<b>${k}:</b> ${v}<br>`).join("");$("aiInsight").textContent=r.aiInsight;$("metadata").innerHTML=Object.entries(r.metadata).map(([k,v])=>`<b>${k}:</b> ${v}<br>`).join("");
@@ -390,14 +547,17 @@ $("clearResult").onclick=()=>{currentResult=null;clearMapResults();resetResultUI
 $("resetWorkspace").onclick=()=>{currentResult=null;clearMapResults();resetResultUI();selectAnalysis("population-density");map.setView(CONFIG.home,CONFIG.zoom);toast("Workspace reset.")};
 $("clearHistory").onclick=()=>{historyManager.clear();renderHistory();toast("History cleared.")};
 $("exportGeoJSON").onclick=()=>currentResult&&download("SUO_"+currentResult.type+"_result.geojson",JSON.stringify(currentResult.geojson,null,2),"application/geo+json");
-$("exportReport").onclick=()=>{if(!currentResult)return;const r=currentResult;download("SUO_"+r.type+"_report.txt",["SELANGOR URBAN OBSERVATORY","SPATIAL ANALYTICS ENGINE v4.0 FINAL","",`Analysis: ${r.label}`,`Date: ${new Date(r.timestamp).toLocaleString()}`,`Population: ${Math.round(r.total).toLocaleString()}`,`Coverage: ${r.coverage==null?"N/A":r.coverage.toFixed(1)+"%"}`,`Critical Areas: ${r.critical}`,`Analysis Units: ${r.units}`,`Execution: ${r.executionMs} ms`,"","URBAN PLANNING AI INSIGHT",r.aiInsight,"","RECOMMENDED ACTIONS",...r.actions.map((x,i)=>`${i+1}. ${x}`),"","NOTE","Prototype Phase 1 uses synthetic datasets. Replace with verified SUO/DOSM data before production."].join("\n"),"text/plain")};
+$("exportReport").onclick=()=>{if(!currentResult)return;const r=currentResult;download("SUO_"+r.type+"_report.txt",["SELANGOR URBAN OBSERVATORY","SPATIAL ANALYTICS ENGINE v4.1 DATA","",`Analysis: ${r.label}`,`Date: ${new Date(r.timestamp).toLocaleString()}`,`Population: ${Math.round(r.total).toLocaleString()}`,`Coverage: ${r.coverage==null?"N/A":r.coverage.toFixed(1)+"%"}`,`Critical Areas: ${r.critical}`,`Analysis Units: ${r.units}`,`Execution: ${r.executionMs} ms`,"","URBAN PLANNING AI INSIGHT",r.aiInsight,"","RECOMMENDED ACTIONS",...r.actions.map((x,i)=>`${i+1}. ${x}`),"","NOTE","v4.1 integrates official OpenDOSM district population statistics. Other Phase 1 spatial layers remain synthetic until verified geometry/facility layers are connected."].join("\n"),"text/plain")};
 $("send3D").onclick=()=>toast("GeoPortal handoff is prepared; configure production URL/API next.");
 $("openGeoportal").onclick=()=>CONFIG.geoportalUrl?window.open(CONFIG.geoportalUrl,"_blank"):toast("Set production 3D GeoPortal URL in CONFIG.geoportalUrl.");
 $("architectureBtn").onclick=showArchitecture;$("modalClose").onclick=()=>$("modalBack").classList.remove("show");$("modalBack").onclick=e=>{if(e.target===$("modalBack"))$("modalBack").classList.remove("show")};
 
 $("fileInput").onchange=e=>{const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const gj=JSON.parse(reader.result),id="import-"+Date.now();dataManager.import(id,file.name,gj);if(importLayer&&map.hasLayer(importLayer))map.removeLayer(importLayer);importLayer=L.geoJSON(gj,{style:{color:"#a78bfa",weight:1.4,fillOpacity:.08}}).addTo(map);renderLayers();toast("GeoJSON imported.")}catch(err){toast("Invalid GeoJSON file.")}};reader.readAsText(file)};
 
+$("syncDOSMBtn").onclick=()=>syncOpenDOSM(true);
+
 renderLayers();renderHistory();selectAnalysis("population-density");
+syncOpenDOSM(false);
 })();
 </script>
 </body>
