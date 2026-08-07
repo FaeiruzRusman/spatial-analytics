@@ -82,6 +82,32 @@ body{overflow:hidden} button,input,select{font:inherit} button{cursor:pointer}
 .legend{display:flex;align-items:center;gap:7px;font-size:8px;color:#a0bbcb;margin:6px 0}.legend i{width:10px;height:10px;border-radius:3px}.c1{background:#2563eb}.c2{background:#22c55e}.c3{background:#f59e0b}.c4{background:#ef4444}
 
 /* toast */
+
+.info-btn{margin-left:auto;border:1px solid #315d77;background:#0b2940;color:#9fc2d5;width:25px;height:25px;border-radius:7px;font-size:10px;padding:0;flex:0 0 auto}
+.info-btn:hover{color:#ffd166;border-color:#557f98}
+.help-card{background:#091e2e;border:1px solid #214860;border-radius:11px;padding:10px;margin-bottom:8px}
+.help-card h4{font-size:9px;margin:0 0 8px;color:#e7f3fa}
+.help-card p{font-size:8px;line-height:1.55;color:#99b2c2;margin:0}
+.help-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.help-chip{border:1px solid #234c65;background:#061522;border-radius:8px;padding:7px;font-size:7px;color:#a9c3d3}
+.workflow-diagram{display:flex;align-items:center;gap:5px;flex-wrap:wrap;font-size:7px;color:#c8dce7}
+.workflow-node{padding:6px 7px;background:#0c2a40;border:1px solid #315b75;border-radius:7px}
+.workflow-arrow{color:#ffd166}
+.legend-dynamic{display:flex;flex-direction:column;gap:6px}
+.legend-item-dyn{display:flex;align-items:center;justify-content:space-between;border:1px solid #244c64;background:#061522;border-radius:8px;padding:7px 8px;font-size:8px;cursor:pointer}
+.legend-item-dyn:hover{border-color:#4c7791}
+.legend-left{display:flex;align-items:center;gap:7px}
+.legend-swatch{width:11px;height:11px;border-radius:3px;display:inline-block}
+.legend-note{font-size:7px;color:#7898aa;line-height:1.5;margin-top:7px}
+.quality-row{display:flex;justify-content:space-between;font-size:7px;padding:5px 0;border-bottom:1px solid #17364b}
+.quality-row:last-child{border:0}
+.modal-back{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:5000;place-items:center}
+.modal-back.show{display:grid}
+.modal{width:min(720px,92vw);max-height:82vh;overflow:auto;background:#081c2b;border:1px solid #315e79;border-radius:14px;padding:15px}
+.modal h3{font-size:13px;margin:0 0 10px}.modal h4{font-size:9px;margin:13px 0 6px;color:#ffd166}.modal p,.modal li,.modal td{font-size:8px;line-height:1.65;color:#b9cfdb}
+.modal table{width:100%;border-collapse:collapse}.modal td{border-bottom:1px solid #1f435a;padding:6px}
+.modal-close{float:right;border:1px solid #315e79;background:#0d2b40;color:#e3f2fa;border-radius:8px;padding:7px 10px;font-size:8px}
+
 #toast{position:fixed;right:385px;top:82px;z-index:3000;background:#0e2a3f;border:1px solid #366681;color:#e9f7ff;border-radius:8px;padding:9px 12px;font-size:8px;opacity:0;transform:translateY(-8px);transition:.2s;pointer-events:none}#toast.show{opacity:1;transform:translateY(0)}
 .leaflet-control-attribution{font-size:7px!important}
 @media(max-width:1050px){body{overflow:auto}.home-grid{grid-template-columns:1fr}#app{grid-template-columns:1fr;height:auto}.left,.right{height:auto}.center{min-height:960px}#toast{right:15px}}
@@ -91,7 +117,7 @@ body{overflow:hidden} button,input,select{font:inherit} button{cursor:pointer}
 
 <section id="homeScreen">
   <header class="home-top">
-    <div class="home-brand"><div class="logo">SUO</div><div><h1>Spatial Analytics Engine</h1><p>Selangor Urban Observatory · v5.0 Production Foundation</p></div></div>
+    <div class="home-brand"><div class="logo">SUO</div><div><h1>Spatial Analytics Engine</h1><p>Selangor Urban Observatory · v5.1 Enterprise UX</p></div></div>
     <div class="home-top-actions"><button id="homeDataBtn">Data Manager</button><button id="homeWorkspaceBtn">Open Workspace</button></div>
   </header>
   <div class="hero">
@@ -130,23 +156,23 @@ body{overflow:hidden} button,input,select{font:inherit} button{cursor:pointer}
 <section id="workspaceScreen" class="hidden">
 <div id="app">
 <aside class="left">
-  <div class="brand"><div class="logo">SUO</div><div><h1>Spatial Analytics Engine</h1><p>Production Foundation v5.0</p></div></div>
+  <div class="brand"><div class="logo">SUO</div><div><h1>Spatial Analytics Engine</h1><p>Enterprise UX v5.1</p></div></div>
   <div class="left-tabs"><button class="left-tab active" data-left="library">Analysis Toolbox</button><button class="left-tab" data-left="data">Data Manager</button><button class="left-tab" data-left="history">History</button></div>
   <div id="left-library" class="left-body active">
     <input id="analysisSearch" class="search" placeholder="Search toolbox..."/>
     <div class="group"><div class="group-title">DEMOGRAPHY</div>
-      <button class="tool active" data-analysis="dosm-population"><span class="tool-icon">DM</span><span><b>DOSM District Population</b><small>Official 2020–2025 statistics</small></span></button>
+      <div class="tool active" data-analysis="dosm-population"><span class="tool-icon">DM</span><span><b>DOSM District Population</b><small>Official 2020–2025 statistics</small></span><button class="info-btn" type="button" data-info="dosm-population">ⓘ</button></div>
       <button class="tool disabled"><span class="tool-icon">PG</span><span><b>Population Growth</b><small>Next module</small></span></button>
       <button class="tool disabled"><span class="tool-icon">PP</span><span><b>Population Projection</b><small>Planned module</small></span></button>
     </div>
     <div class="group"><div class="group-title">ACCESSIBILITY</div>
-      <button class="tool" data-analysis="facility-accessibility"><span class="tool-icon">FA</span><span><b>Facility Accessibility</b><small>Requires point facility layer</small></span></button>
+      <div class="tool" data-analysis="facility-accessibility"><span class="tool-icon">FA</span><span><b>Facility Accessibility</b><small>Requires point facility layer</small></span><button class="info-btn" type="button" data-info="facility-accessibility">ⓘ</button></div>
     </div>
     <div class="group"><div class="group-title">URBAN</div>
-      <button class="tool" data-analysis="urban-service-gap"><span class="tool-icon">UG</span><span><b>Urban Service Gap</b><small>DOSM + imported facilities</small></span></button>
+      <div class="tool" data-analysis="urban-service-gap"><span class="tool-icon">UG</span><span><b>Urban Service Gap</b><small>DOSM + imported facilities</small></span><button class="info-btn" type="button" data-info="urban-service-gap">ⓘ</button></div>
     </div>
     <div class="group"><div class="group-title">NETWORK</div>
-      <button class="tool" data-analysis="network-accessibility"><span class="tool-icon">NW</span><span><b>Network Accessibility</b><small>Shortest path on imported lines</small></span></button>
+      <div class="tool" data-analysis="network-accessibility"><span class="tool-icon">NW</span><span><b>Network Accessibility</b><small>Shortest path on imported lines</small></span><button class="info-btn" type="button" data-info="network-accessibility">ⓘ</button></div>
     </div>
     <div class="group"><div class="group-title">PLANNED</div>
       <button class="tool disabled"><span class="tool-icon">SS</span><span><b>Site Suitability</b><small>Planned</small></span></button>
@@ -183,16 +209,42 @@ body{overflow:hidden} button,input,select{font:inherit} button{cursor:pointer}
 </main>
 
 <aside class="right">
+  <div class="help-card">
+    <h4>Analysis Overview</h4>
+    <p id="analysisPurpose">Select an analysis to view its purpose and expected output.</p>
+    <div id="analysisQuickInfo" class="help-grid" style="margin-top:8px"></div>
+    <div style="margin-top:8px"><button id="aboutAnalysisBtn" class="ghost" style="width:100%">ⓘ About this Analysis</button></div>
+  </div>
+  <div class="help-card">
+    <h4>Workflow</h4>
+    <div id="workflowDiagram" class="workflow-diagram"></div>
+  </div>
   <div class="flow-card"><div class="flow-title"><span class="flow-num" id="step1">01</span>Input Data</div><div id="inputPanel"></div></div>
   <div class="flow-card"><div class="flow-title"><span class="flow-num" id="step2">02</span>Parameters</div><div id="parameterPanel" class="param"></div></div>
   <div class="flow-card"><div class="flow-title"><span class="flow-num" id="step3">03</span>Processing</div><div class="progress"><div id="progressBar"></div></div><div id="processStatus" class="proc-status">Ready to run.</div><div id="processLog" class="proc-log"></div><button id="runBtn" class="run">Run Analysis</button></div>
-  <div class="flow-card"><div class="flow-title"><span class="flow-num" id="step4">04</span>Result Actions</div><div class="actions"><button id="exportGeoJSON" disabled>Export GeoJSON</button><button id="exportReport" disabled>Export Report</button><button id="send3D" disabled>View in 3D GeoPortal</button><button id="clearResult">Clear Result</button></div></div>
-  <div class="flow-card"><div class="flow-title"><span class="flow-num">05</span>Status</div><div id="toolStatus" class="result-text">DOSM module is ready.</div></div>
+  <div class="flow-card"><div class="flow-title"><span class="flow-num" id="step4">04</span>Result Actions</div><div class="actions"><button id="exportGeoJSON" disabled>Export GeoJSON</button><button id="exportCSV" disabled>Export CSV</button><button id="exportReport" disabled>Export Report</button><button id="send3D" disabled>View in 3D GeoPortal</button><button id="clearResult">Clear Result</button></div></div>
+  <div class="flow-card">
+    <div class="flow-title"><span class="flow-num">05</span>Result Legend</div>
+    <div id="dynamicLegend" class="legend-dynamic">
+      <div class="result-text">Run analysis to generate result classes.</div>
+    </div>
+    <div id="legendInterpretation" class="legend-note">Legend meaning changes according to the selected analysis.</div>
+  </div>
+  <div class="help-card">
+    <h4>Method & Data Quality</h4>
+    <div id="methodQuality"></div>
+  </div>
 </aside>
 </div>
 </section>
 
 <div id="toast"></div>
+<div id="analysisModal" class="modal-back">
+  <div class="modal">
+    <button id="modalClose" class="modal-close">Close</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@turf/turf@7/turf.min.js"></script>
 <script>
@@ -265,6 +317,66 @@ function renderHistory(){
 function optionsFor(type){const a=dm.importedByType(type);return a.length?a.map(x=>`<option value="${x.id}">${x.name}</option>`).join(""):`<option value="">No ${type} layer imported</option>`}
 
 /* -------- MODULES -------- */
+
+const ANALYSIS_HELP={
+ "dosm-population":{
+  purpose:"Explore official Selangor district population statistics and compare population concentration between administrative districts.",
+  inputs:["DOSM/OpenDOSM district population 2020–2025","SUO district boundary"],
+  outputs:["Choropleth map","District ranking","Statistics","Charts","Planning interpretation"],
+  applications:["Strategic population planning","Infrastructure demand screening","District comparison","Public-facility planning"],
+  complexity:"Beginner",
+  confidence:"High · Official population dataset",
+  method:"District attribute join + quartile classification",
+  limitations:"District totals do not show intra-district population distribution.",
+  workflow:["DOSM Population","Boundary Validation","District Join","Ranking","Charts","Planning Insight"],
+  example:"Identify the Selangor district with the largest population before reviewing public-facility demand.",
+  legend:["Very Low Population","Low Population","Moderate Population","High Population"],
+  interpretation:"Red represents districts in the highest population class. Blue represents the lowest population class. Classification is relative to the 9 Selangor districts for the selected year."
+ },
+ "facility-accessibility":{
+  purpose:"Assess spatial coverage of an imported verified public-facility point layer using a configurable Euclidean service radius.",
+  inputs:["Verified point GeoJSON","SUO district boundary","Coverage distance"],
+  outputs:["Coverage map","Facility count by district","District area coverage %","Zero-facility districts"],
+  applications:["Facility provision screening","Health and safety planning","School/service coverage","Preliminary catchment assessment"],
+  complexity:"Intermediate",
+  confidence:"Screening · depends on imported facility quality",
+  method:"Euclidean buffer + polygon intersection",
+  limitations:"Euclidean buffers do not represent road travel time, facility capacity or barriers.",
+  workflow:["Facility Layer","Buffer","District Overlay","Coverage %","Ranking","Planning Insight"],
+  example:"Import hospital points and identify districts with low land-area coverage within 5 km.",
+  legend:["Very Low Coverage","Low Coverage","Moderate Coverage","High Coverage"],
+  interpretation:"Red represents the highest land-area coverage from the imported facility layer; blue represents the lowest. High coverage is generally positive, unlike a risk/gap analysis."
+ },
+ "urban-service-gap":{
+  purpose:"Identify districts with high population pressure and relatively low provision of an imported facility type.",
+  inputs:["DOSM district population","Verified facility point GeoJSON","SUO district boundary"],
+  outputs:["Service Gap Index","District priority ranking","Facilities per 100,000 people","Planning recommendations"],
+  applications:["Budget prioritisation","Infrastructure investment screening","Underserved-area identification","Inter-district comparison"],
+  complexity:"Advanced",
+  confidence:"Screening index · suitable for prioritisation",
+  method:"55% population pressure + 45% facility-rate deficit",
+  limitations:"Does not include facility capacity, travel time, service quality or age-specific demand.",
+  workflow:["Population","Facility Count","Rate /100k","Gap Index","Ranking","Recommendation"],
+  example:"Compare hospital provision against district population and identify priority districts for detailed review.",
+  legend:["Low Gap","Moderate Gap","High Gap","Critical Gap"],
+  interpretation:"Red indicates the highest service-gap class and therefore the greatest priority for further investigation. Blue indicates the lowest gap."
+ },
+ "network-accessibility":{
+  purpose:"Calculate a shortest-distance route along an imported LineString road network between a user-selected origin and destination.",
+  inputs:["Road LineString GeoJSON","Origin point","Destination point"],
+  outputs:["Shortest network path","Network distance","Route vertices","Exportable route GeoJSON"],
+  applications:["Routing","Emergency-response screening","Accessibility analysis","Network connectivity checks"],
+  complexity:"Advanced",
+  confidence:"Depends on network topology",
+  method:"Nearest-vertex snap + Dijkstra shortest-distance routing",
+  limitations:"v5.1 does not apply speed, one-way restrictions, turn penalties or road hierarchy.",
+  workflow:["Road Network","Pick Origin","Pick Destination","Snap to Network","Dijkstra","Route Result"],
+  example:"Import the same road network used by the GeoPortal and calculate a shortest-distance route between two facilities.",
+  legend:["Route Result","","",""],
+  interpretation:"Network Accessibility returns a route line rather than four polygon classes. The highlighted route represents the shortest geometric path found on the imported network."
+ }
+};
+
 const modules={
  "dosm-population":{
   label:"DOSM District Population",subtitle:"Official Selangor administrative-district population statistics.",
@@ -369,16 +481,76 @@ function dijkstra(graph,start,end){const dist=new Map([[start,0]]),prev=new Map(
 map.on("click",e=>{if(!routeSelectionMode)return;if(routeSelectionMode==="origin"){originLatLng=e.latlng;if(originMarker)map.removeLayer(originMarker);originMarker=L.circleMarker(e.latlng,{radius:6,color:"#22c55e",fillColor:"#22c55e",fillOpacity:1}).addTo(map).bindPopup("Origin")}else{destLatLng=e.latlng;if(destMarker)map.removeLayer(destMarker);destMarker=L.circleMarker(e.latlng,{radius:6,color:"#ef4444",fillColor:"#ef4444",fillOpacity:1}).addTo(map).bindPopup("Destination")}routeSelectionMode=null;updateRouteStatus()});
 function updateRouteStatus(){if($("routePointStatus"))$("routePointStatus").textContent=`Origin: ${originLatLng?"set":"not set"} · Destination: ${destLatLng?"set":"not set"}`}
 
+
+function renderAnalysisHelp(id){
+ const h=ANALYSIS_HELP[id]; if(!h)return;
+ $("analysisPurpose").textContent=h.purpose;
+ $("analysisQuickInfo").innerHTML=
+   `<div class="help-chip"><b>Complexity</b><br>${h.complexity}</div>
+    <div class="help-chip"><b>Confidence</b><br>${h.confidence}</div>
+    <div class="help-chip"><b>Output</b><br>${h.outputs[0]}</div>
+    <div class="help-chip"><b>Method</b><br>${h.method}</div>`;
+ $("workflowDiagram").innerHTML=h.workflow.map((x,i)=>`<span class="workflow-node">${x}</span>${i<h.workflow.length-1?'<span class="workflow-arrow">→</span>':''}`).join("");
+ $("methodQuality").innerHTML=
+   `<div class="quality-row"><span>Method</span><span>${h.method}</span></div>
+    <div class="quality-row"><span>Confidence</span><span>${h.confidence}</span></div>
+    <div class="quality-row"><span>Complexity</span><span>${h.complexity}</span></div>`;
+ $("legendInterpretation").textContent=h.interpretation;
+}
+
+function showAnalysisInfo(id){
+ const h=ANALYSIS_HELP[id]; if(!h)return;
+ $("modalContent").innerHTML=`
+   <h3>${modules[id].label}</h3>
+   <p>${h.purpose}</p>
+   <h4>Input Requirements</h4><ul>${h.inputs.map(x=>`<li>${x}</li>`).join("")}</ul>
+   <h4>Outputs</h4><ul>${h.outputs.map(x=>`<li>${x}</li>`).join("")}</ul>
+   <h4>Planning Applications</h4><ul>${h.applications.map(x=>`<li>${x}</li>`).join("")}</ul>
+   <h4>Workflow</h4><p>${h.workflow.join(" → ")}</p>
+   <h4>Example Use Case</h4><p>${h.example}</p>
+   <h4>Analysis Method</h4><p>${h.method}</p>
+   <h4>Limitations</h4><p>${h.limitations}</p>
+   <table><tr><td><b>Complexity</b></td><td>${h.complexity}</td></tr><tr><td><b>Confidence</b></td><td>${h.confidence}</td></tr></table>`;
+ $("analysisModal").classList.add("show");
+}
+
+function renderLegend(r){
+ const box=$("dynamicLegend"),h=ANALYSIS_HELP[r.type];
+ if(r.route){
+   box.innerHTML=`<div class="legend-item-dyn"><div class="legend-left"><span class="legend-swatch" style="background:#ffd166"></span><span>Shortest Route</span></div><b>1</b></div>`;
+   $("legendInterpretation").textContent=h.interpretation;
+   return;
+ }
+ const counts=[1,2,3,4].map(c=>r.geojson.features.filter(f=>Number(f.properties.class)===c).length);
+ const labels=h.legend;
+ box.innerHTML=[1,2,3,4].map((c,i)=>`
+   <div class="legend-item-dyn" data-class="${c}">
+     <div class="legend-left"><span class="legend-swatch" style="background:${classColors[c]}"></span><span>${labels[i]||("Class "+c)}</span></div>
+     <b>${counts[i]}</b>
+   </div>`).join("");
+ box.querySelectorAll(".legend-item-dyn").forEach(el=>{
+   el.onclick=()=>{
+     if(!resultLayer)return;
+     const c=Number(el.dataset.class);
+     resultLayer.eachLayer(layer=>{
+       const fc=Number(layer.feature?.properties?.class);
+       if(layer.setStyle)layer.setStyle({fillOpacity:fc===c?0.78:0.08,weight:fc===c?2:.35});
+     });
+   };
+ });
+ $("legendInterpretation").textContent=h.interpretation;
+}
+
 /* ----- UI rendering ----- */
 function resetUI(){
- ["k1","k2","k3","k4","k5"].forEach(id=>$(id).textContent="—");$("statistics").textContent="Run analysis to calculate statistics.";$("chart").innerHTML="";$("aiInsight").textContent="Run analysis to generate planning interpretation.";$("aiActions").innerHTML="<li>No recommendations yet.</li>";$("metadata").textContent="No metadata yet.";["exportGeoJSON","exportReport","send3D"].forEach(id=>$(id).disabled=true)
+ ["k1","k2","k3","k4","k5"].forEach(id=>$(id).textContent="—");$("statistics").textContent="Run analysis to calculate statistics.";$("chart").innerHTML="";$("aiInsight").textContent="Run analysis to generate planning interpretation.";$("aiActions").innerHTML="<li>No recommendations yet.</li>";$("metadata").textContent="No metadata yet.";["exportGeoJSON","exportCSV","exportReport","send3D"].forEach(id=>$(id).disabled=true)
 }
 function renderResult(r){
  currentResult=r;
  ["k1l","k2l","k3l","k4l"].forEach((id,i)=>$(id).textContent=r.kpis[i*2]);["k1","k2","k3","k4"].forEach((id,i)=>$(id).textContent=r.kpis[i*2+1]);$("k5").textContent=r.execution+" ms";
  $("statistics").innerHTML=Object.entries(r.stats).map(([k,v])=>`<b>${k}:</b> ${v}<br>`).join("");$("aiInsight").textContent=r.ai;$("aiActions").innerHTML=r.actions.map(x=>`<li>${x}</li>`).join("");$("metadata").innerHTML=Object.entries(r.metadata).map(([k,v])=>`<b>${k}:</b> ${v}<br>`).join("");
  const chart=$("chart");chart.innerHTML="";if(r.chart?.length){const max=Math.max(...r.chart.map(x=>x.value),1);r.chart.forEach(x=>{const c=document.createElement("div");c.className="chart-col";c.innerHTML=`<div class="chart-bar" style="height:${Math.max(4,x.value/max*125)}px"></div><b>${typeof x.value==="number"&&x.value<10?x.value.toFixed(2):compact(x.value)}</b><br>${x.label}`;chart.appendChild(c)})}else chart.innerHTML='<div class="result-text">No categorical chart for this analysis.</div>';
- ["exportGeoJSON","exportReport","send3D"].forEach(id=>$(id).disabled=false);
+ ["exportGeoJSON","exportCSV","exportReport","send3D"].forEach(id=>$(id).disabled=false);renderLegend(r);
  renderMapResult(r);
 }
 function renderMapResult(r){
@@ -393,7 +565,7 @@ function renderMapResult(r){
  if(resultLayer.getBounds().isValid())map.fitBounds(resultLayer.getBounds(),{padding:[20,20]});
 }
 function selectAnalysis(id){
- const m=modules[id];if(!m)return;currentAnalysis=id;resetUI();document.querySelectorAll(".tool[data-analysis]").forEach(b=>b.classList.toggle("active",b.dataset.analysis===id));$("title").textContent=m.label;$("subtitle").textContent=m.subtitle;$("inputPanel").innerHTML=m.inputs();$("parameterPanel").innerHTML=m.params();if(m.bind)m.bind();$("toolStatus").textContent=m.status();$("processStatus").textContent="Ready to run.";$("processLog").innerHTML="";$("progressBar").style.width="0%";$("mapState").textContent="Workspace Ready"
+ const m=modules[id];if(!m)return;currentAnalysis=id;resetUI();document.querySelectorAll(".tool[data-analysis]").forEach(b=>b.classList.toggle("active",b.dataset.analysis===id));$("title").textContent=m.label;$("subtitle").textContent=m.subtitle;$("inputPanel").innerHTML=m.inputs();$("parameterPanel").innerHTML=m.params();if(m.bind)m.bind();renderAnalysisHelp(id);$("processStatus").textContent="Ready to run.";$("processLog").innerHTML="";$("progressBar").style.width="0%";$("mapState").textContent="Workspace Ready";$("dynamicLegend").innerHTML='<div class="result-text">Run analysis to generate result classes.</div>';renderAnalysisHelp(id)
 }
 async function runCurrent(){
  const m=modules[currentAnalysis],btn=$("runBtn");btn.disabled=true;btn.textContent="Processing...";$("processLog").innerHTML="";["step1","step2"].forEach(id=>$(id).classList.add("done"));$("step3").classList.add("running");
@@ -406,6 +578,12 @@ function openWorkspace(id){$("homeScreen").classList.add("hidden");$("workspaceS
 function openHome(){$("workspaceScreen").classList.add("hidden");$("homeScreen").classList.remove("hidden");renderHistory();renderImports()}
 
 /* events */
+
+document.querySelectorAll(".info-btn[data-info]").forEach(b=>b.onclick=e=>{e.stopPropagation();showAnalysisInfo(b.dataset.info)});
+$("aboutAnalysisBtn").onclick=()=>showAnalysisInfo(currentAnalysis);
+$("modalClose").onclick=()=>$("analysisModal").classList.remove("show");
+$("analysisModal").onclick=e=>{if(e.target===$("analysisModal"))$("analysisModal").classList.remove("show")};
+
 document.querySelectorAll("[data-launch]").forEach(b=>b.onclick=()=>openWorkspace(b.dataset.launch));
 $("homeWorkspaceBtn").onclick=()=>openWorkspace("dosm-population");
 $("homeDataBtn").onclick=()=>{openWorkspace("dosm-population");setTimeout(()=>document.querySelector('[data-left="data"]').click(),50)};
@@ -420,8 +598,19 @@ $("resultToggle").onclick=e=>{const l=routeLayer||resultLayer;if(!l)return;if(ma
 $("basemapBtn").onclick=()=>{map.removeLayer(currentBase);currentBase=currentBase===osm?topo:osm;currentBase.addTo(map);toast(currentBase===osm?"OpenStreetMap":"Topographic basemap")};
 $("printBtn").onclick=()=>window.print();$("resetWorkspace").onclick=()=>{clearResults();resetUI();map.setView(CONFIG.home,CONFIG.zoom);selectAnalysis("dosm-population")};$("clearHistory").onclick=()=>{history.clear();renderHistory()};
 $("clearResult").onclick=()=>{clearResults();resetUI();toast("Result cleared.")};
+
+$("exportCSV").onclick=()=>{
+ if(!currentResult)return;
+ const fs=currentResult.geojson?.features||[];
+ if(!fs.length)return toast("No tabular result to export.");
+ const keys=[...new Set(fs.flatMap(f=>Object.keys(f.properties||{})))];
+ const esc=v=>`"${String(v??"").replace(/"/g,'""')}"`;
+ const csv=[keys.map(esc).join(","),...fs.map(f=>keys.map(k=>esc(f.properties?.[k])).join(","))].join("\n");
+ download("SUO_"+currentResult.type+"_result.csv",csv,"text/csv");
+};
+
 $("exportGeoJSON").onclick=()=>currentResult&&download("SUO_"+currentResult.type+"_result.geojson",JSON.stringify(currentResult.geojson,null,2),"application/geo+json");
-$("exportReport").onclick=()=>{if(!currentResult)return;const r=currentResult;download("SUO_"+r.type+"_report.txt",["SELANGOR URBAN OBSERVATORY","SPATIAL ANALYTICS ENGINE v5.0","",`Analysis: ${r.label}`,"",...Object.entries(r.stats).map(([k,v])=>`${k}: ${v}`),"","PLANNING INTERPRETATION",r.ai,"","RECOMMENDED ACTIONS",...r.actions.map((x,i)=>`${i+1}. ${x}`)].join("\n"))};
+$("exportReport").onclick=()=>{if(!currentResult)return;const r=currentResult;download("SUO_"+r.type+"_report.txt",["SELANGOR URBAN OBSERVATORY","SPATIAL ANALYTICS ENGINE v5.1","",`Analysis: ${r.label}`,"",...Object.entries(r.stats).map(([k,v])=>`${k}: ${v}`),"","PLANNING INTERPRETATION",r.ai,"","RECOMMENDED ACTIONS",...r.actions.map((x,i)=>`${i+1}. ${x}`)].join("\n"))};
 $("send3D").onclick=()=>toast("GeoPortal handoff endpoint is reserved for integration.");
 $("openGeoportal").onclick=()=>CONFIG.geoportalUrl?window.open(CONFIG.geoportalUrl,"_blank"):toast("Set the production GeoPortal URL in CONFIG.");
 $("fileInput").onchange=e=>{const file=e.target.files[0];if(!file)return;const rd=new FileReader();rd.onload=()=>{try{const gj=JSON.parse(rd.result);if(!gj.features?.length)throw new Error("No features");const id=dm.importFile(file.name,gj);renderImports();renderBaseData();toast(`Imported ${file.name} as ${geoType(gj)} layer.`);selectAnalysis(currentAnalysis)}catch(err){toast("Invalid GeoJSON file.")}};rd.readAsText(file)};
