@@ -1,29 +1,18 @@
-# SUO Spatial Analytics Engine v4.1.2 BUNDLED
+# SUO Spatial Analytics Engine v4.1.3 DISTRICT FIX
 
-This hotfix removes the browser/CORS dependency for DOSM population analysis.
+Fixes missing Hulu Langat and Hulu Selangor results.
 
-## Official data bundled
-Source:
-https://storage.dosm.gov.my/population/population_district.csv
+Cause:
+OpenDOSM official district names are:
+- Ulu Langat
+- Ulu Selangor
 
-Filter:
-- state = Selangor
-- sex = both
-- age = overall
-- ethnicity = overall
+The map centroid lookup previously only contained:
+- Hulu Langat
+- Hulu Selangor
 
-Years bundled:
-2020, 2021, 2022, 2023, 2024, 2025
+v4.1.3 adds aliases for both official DOSM names while displaying the preferred portal labels:
+- Hulu Langat
+- Hulu Selangor
 
-Records bundled:
-54 records = 9 Selangor administrative districts x 6 years.
-
-## Behaviour
-- The DOSM module works without any browser fetch.
-- Latest available year is selected automatically.
-- Official values are embedded directly inside `index.html`.
-- A CSV audit copy is also included in this ZIP.
-- District map symbols remain representative centroids, not official boundary geometry.
-
-## Next step
-v4.2 should connect verified district polygons and join these official DOSM records to the polygons.
+The official source names are still preserved in the popup for traceability.
