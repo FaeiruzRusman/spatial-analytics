@@ -1,8 +1,13 @@
 {
-  "appName": "SUO Spatial Analytics Engine",
-  "version": "2.0",
-  "phase": "Core Engine + Phase 1 Analytics",
-  "geoportalUrl": "SET_PRODUCTION_GEO_PORTAL_URL_HERE",
-  "portalUrl": "SET_PRODUCTION_SUO_PORTAL_URL_HERE",
-  "dataMode": "synthetic-demo"
+  "app": "SUO Spatial Analytics Engine",
+  "version": "3.0 Enterprise",
+  "deployment": "GitHub Pages",
+  "entry": "index.html",
+  "external_dependencies": [
+    "Leaflet 1.9.4",
+    "Turf.js 7",
+    "OpenStreetMap"
+  ],
+  "geoportal_handoff": "Prepared, production URL/API not yet configured",
+  "data_status": "Synthetic Phase 1 demo"
 }
