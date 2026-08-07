@@ -1,23 +1,29 @@
-# SUO Spatial Analytics Engine v4.1.1 HOTFIX
+# SUO Spatial Analytics Engine v4.1.2 BUNDLED
 
-Fixes the DOSM District Population analysis failure on GitHub Pages.
+This hotfix removes the browser/CORS dependency for DOSM population analysis.
 
-## What changed
-- Official `api.data.gov.my` OpenAPI is now the PRIMARY data source.
-- Official OpenDOSM CSV is the FALLBACK source.
-- No automatic DOSM request on initial page load.
-- DOSM sync is now manual through Data Manager.
-- Processing Console displays the actual fetch/parse error.
-- Progress resets correctly after failure.
-- Accepts `sex=both` or `sex=overall` for compatibility with dataset revisions.
+## Official data bundled
+Source:
+https://storage.dosm.gov.my/population/population_district.csv
 
-## Test
-1. Upload this `index.html` to repository root.
-2. Hard refresh the GitHub Pages site (Ctrl+F5).
-3. Open Data Manager.
-4. Click `Connect OpenDOSM Population`.
-5. Confirm status shows `Live`.
-6. Run `DOSM District Population`.
+Filter:
+- state = Selangor
+- sex = both
+- age = overall
+- ethnicity = overall
 
-Official dataset:
-https://data.gov.my/data-catalogue/population_district
+Years bundled:
+2020, 2021, 2022, 2023, 2024, 2025
+
+Records bundled:
+54 records = 9 Selangor administrative districts x 6 years.
+
+## Behaviour
+- The DOSM module works without any browser fetch.
+- Latest available year is selected automatically.
+- Official values are embedded directly inside `index.html`.
+- A CSV audit copy is also included in this ZIP.
+- District map symbols remain representative centroids, not official boundary geometry.
+
+## Next step
+v4.2 should connect verified district polygons and join these official DOSM records to the polygons.

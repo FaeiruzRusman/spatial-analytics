@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>SUO Spatial Analytics Engine v4.1.1 HOTFIX</title>
+<title>SUO Spatial Analytics Engine v4.1.2 BUNDLED</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
 :root{
@@ -101,7 +101,7 @@ button,input,select{font:inherit} button{cursor:pointer}
 <body>
 <div id="app">
 <aside class="left">
-  <div class="brand"><div class="brandmark">SUO</div><div><h1>Spatial Analytics Engine</h1><p>Selangor Urban Observatory · Enterprise Data v4.1.1</p></div></div>
+  <div class="brand"><div class="brandmark">SUO</div><div><h1>Spatial Analytics Engine</h1><p>Selangor Urban Observatory · Enterprise Data v4.1.2</p></div></div>
   <div class="left-tabs">
     <button class="left-tab active" data-left="library">Analysis Library</button>
     <button class="left-tab" data-left="data">Data Manager</button>
@@ -143,14 +143,14 @@ button,input,select{font:inherit} button{cursor:pointer}
     <div class="mini-card"><h4>Enterprise Data Sources</h4>
       <div class="data-row"><span>Population Demo</span><em class="ok">Ready</em></div>
       <div class="data-row"><span>Facility Demo</span><em class="ok">Ready</em></div>
-      <div class="data-row"><span>OpenDOSM District Population</span><em id="dosmSourceStatus">Not synced</em></div>
+      <div class="data-row"><span>OpenDOSM District Population</span><em id="dosmSourceStatus">Bundled</em></div>
       <div class="data-row"><span>District Geometry</span><em>Centroid proxy</em></div>
       <div class="data-row"><span>PBT Boundary</span><em>Pending verified layer</em></div>
       <div class="data-row"><span>SUO Data Hub API</span><em>Not linked</em></div>
     </div>
-    <button id="syncDOSMBtn" style="width:100%;padding:9px;border-radius:8px;border:1px solid #315f7c;background:#0d2a3f;color:#e8f5fc;font-size:8px;margin-bottom:8px">Connect OpenDOSM Population</button>
+    <button id="syncDOSMBtn" style="width:100%;padding:9px;border-radius:8px;border:1px solid #315f7c;background:#0d2a3f;color:#e8f5fc;font-size:8px;margin-bottom:8px">Load Bundled DOSM Population</button>
     <div class="mini-card"><h4>OpenDOSM Sync</h4>
-      <div class="data-row"><span>Status</span><em id="dosmSyncText">Manual connect</em></div>
+      <div class="data-row"><span>Status</span><em id="dosmSyncText">Bundled official data</em></div>
       <div class="data-row"><span>Latest Year</span><em id="dosmLatestYear">—</em></div>
       <div class="data-row"><span>Selangor Districts</span><em id="dosmDistrictCount">—</em></div>
     </div>
@@ -270,7 +270,7 @@ button,input,select{font:inherit} button{cursor:pointer}
 (() => {
 "use strict";
 const CONFIG={
- version:"4.1.1 HOTFIX",
+ version:"4.1.2 BUNDLED",
  bbox:[100.95,2.62,101.95,3.83],
  home:[3.18,101.53],
  zoom:8,
@@ -309,6 +309,7 @@ const facilities=turf.featureCollection(Array.from({length:81},(_,i)=>{const typ
 dataManager.register("population",{name:"Population Demo",type:"Point GeoJSON",status:"Ready",geojson:population});
 dataManager.register("facilities",{name:"Facilities Demo",type:"Point GeoJSON",status:"Ready",geojson:facilities});
 
+const BUNDLED_DOSM_SELANGOR=[{"state":"Selangor","district":"Gombak","date":"2020-01-01","sex":"both","age":"overall","ethnicity":"overall","population":942.4},{"state":"Selangor","district":"Klang","date":"2020-01-01","sex":"both","age":"overall","ethnicity":"overall","population":1088.9},{"state":"Selangor","district":"Kuala Langat","date":"2020-01-01","sex":"both","age":"overall","ethnicity":"overall","population":307.4},{"state":"Selangor","district":"Kuala Selangor","date":"2020-01-01","sex":"both","age":"overall","ethnicity":"overall","population":281.7},{"state":"Selangor","district":"Petaling","date":"2020-01-01","sex":"both","age":"overall","ethnicity":"overall","population":2298.1},{"state":"Selangor","district":"Sabak Bernam","date":"2020-01-01","sex":"both","age":"overall","ethnicity":"overall","population":107.1},{"state":"Selangor","district":"Sepang","date":"2020-01-01","sex":"both","age":"overall","ethnicity":"overall","population":325.2},{"state":"Selangor","district":"Ulu Langat","date":"2020-01-01","sex":"both","age":"overall","ethnicity":"overall","population":1400.5},{"state":"Selangor","district":"Ulu Selangor","date":"2020-01-01","sex":"both","age":"overall","ethnicity":"overall","population":243.0},{"state":"Selangor","district":"Gombak","date":"2021-01-01","sex":"both","age":"overall","ethnicity":"overall","population":948.0},{"state":"Selangor","district":"Klang","date":"2021-01-01","sex":"both","age":"overall","ethnicity":"overall","population":1078.7},{"state":"Selangor","district":"Kuala Langat","date":"2021-01-01","sex":"both","age":"overall","ethnicity":"overall","population":312.2},{"state":"Selangor","district":"Kuala Selangor","date":"2021-01-01","sex":"both","age":"overall","ethnicity":"overall","population":285.1},{"state":"Selangor","district":"Petaling","date":"2021-01-01","sex":"both","age":"overall","ethnicity":"overall","population":2315.7},{"state":"Selangor","district":"Sabak Bernam","date":"2021-01-01","sex":"both","age":"overall","ethnicity":"overall","population":107.5},{"state":"Selangor","district":"Sepang","date":"2021-01-01","sex":"both","age":"overall","ethnicity":"overall","population":330.7},{"state":"Selangor","district":"Ulu Langat","date":"2021-01-01","sex":"both","age":"overall","ethnicity":"overall","population":1393.3},{"state":"Selangor","district":"Ulu Selangor","date":"2021-01-01","sex":"both","age":"overall","ethnicity":"overall","population":243.4},{"state":"Selangor","district":"Gombak","date":"2022-01-01","sex":"both","age":"overall","ethnicity":"overall","population":950.2},{"state":"Selangor","district":"Klang","date":"2022-01-01","sex":"both","age":"overall","ethnicity":"overall","population":1094.1},{"state":"Selangor","district":"Kuala Langat","date":"2022-01-01","sex":"both","age":"overall","ethnicity":"overall","population":314.5},{"state":"Selangor","district":"Kuala Selangor","date":"2022-01-01","sex":"both","age":"overall","ethnicity":"overall","population":287.6},{"state":"Selangor","district":"Petaling","date":"2022-01-01","sex":"both","age":"overall","ethnicity":"overall","population":2304.8},{"state":"Selangor","district":"Sabak Bernam","date":"2022-01-01","sex":"both","age":"overall","ethnicity":"overall","population":107.9},{"state":"Selangor","district":"Sepang","date":"2022-01-01","sex":"both","age":"overall","ethnicity":"overall","population":331.5},{"state":"Selangor","district":"Ulu Langat","date":"2022-01-01","sex":"both","age":"overall","ethnicity":"overall","population":1413.3},{"state":"Selangor","district":"Ulu Selangor","date":"2022-01-01","sex":"both","age":"overall","ethnicity":"overall","population":246.4},{"state":"Selangor","district":"Gombak","date":"2023-01-01","sex":"both","age":"overall","ethnicity":"overall","population":966.2},{"state":"Selangor","district":"Klang","date":"2023-01-01","sex":"both","age":"overall","ethnicity":"overall","population":1134.0},{"state":"Selangor","district":"Kuala Langat","date":"2023-01-01","sex":"both","age":"overall","ethnicity":"overall","population":320.7},{"state":"Selangor","district":"Kuala Selangor","date":"2023-01-01","sex":"both","age":"overall","ethnicity":"overall","population":293.2},{"state":"Selangor","district":"Petaling","date":"2023-01-01","sex":"both","age":"overall","ethnicity":"overall","population":2334.7},{"state":"Selangor","district":"Sabak Bernam","date":"2023-01-01","sex":"both","age":"overall","ethnicity":"overall","population":109.2},{"state":"Selangor","district":"Sepang","date":"2023-01-01","sex":"both","age":"overall","ethnicity":"overall","population":339.2},{"state":"Selangor","district":"Ulu Langat","date":"2023-01-01","sex":"both","age":"overall","ethnicity":"overall","population":1460.3},{"state":"Selangor","district":"Ulu Selangor","date":"2023-01-01","sex":"both","age":"overall","ethnicity":"overall","population":252.2},{"state":"Selangor","district":"Gombak","date":"2024-01-01","sex":"both","age":"overall","ethnicity":"overall","population":979.9},{"state":"Selangor","district":"Klang","date":"2024-01-01","sex":"both","age":"overall","ethnicity":"overall","population":1174.7},{"state":"Selangor","district":"Kuala Langat","date":"2024-01-01","sex":"both","age":"overall","ethnicity":"overall","population":326.4},{"state":"Selangor","district":"Kuala Selangor","date":"2024-01-01","sex":"both","age":"overall","ethnicity":"overall","population":298.4},{"state":"Selangor","district":"Petaling","date":"2024-01-01","sex":"both","age":"overall","ethnicity":"overall","population":2359.7},{"state":"Selangor","district":"Sabak Bernam","date":"2024-01-01","sex":"both","age":"overall","ethnicity":"overall","population":110.3},{"state":"Selangor","district":"Sepang","date":"2024-01-01","sex":"both","age":"overall","ethnicity":"overall","population":347.0},{"state":"Selangor","district":"Ulu Langat","date":"2024-01-01","sex":"both","age":"overall","ethnicity":"overall","population":1508.0},{"state":"Selangor","district":"Ulu Selangor","date":"2024-01-01","sex":"both","age":"overall","ethnicity":"overall","population":258.3},{"state":"Selangor","district":"Gombak","date":"2025-01-01","sex":"both","age":"overall","ethnicity":"overall","population":985.4},{"state":"Selangor","district":"Klang","date":"2025-01-01","sex":"both","age":"overall","ethnicity":"overall","population":1183.0},{"state":"Selangor","district":"Kuala Langat","date":"2025-01-01","sex":"both","age":"overall","ethnicity":"overall","population":329.0},{"state":"Selangor","district":"Kuala Selangor","date":"2025-01-01","sex":"both","age":"overall","ethnicity":"overall","population":301.6},{"state":"Selangor","district":"Petaling","date":"2025-01-01","sex":"both","age":"overall","ethnicity":"overall","population":2370.6},{"state":"Selangor","district":"Sabak Bernam","date":"2025-01-01","sex":"both","age":"overall","ethnicity":"overall","population":110.5},{"state":"Selangor","district":"Sepang","date":"2025-01-01","sex":"both","age":"overall","ethnicity":"overall","population":350.4},{"state":"Selangor","district":"Ulu Langat","date":"2025-01-01","sex":"both","age":"overall","ethnicity":"overall","population":1516.6},{"state":"Selangor","district":"Ulu Selangor","date":"2025-01-01","sex":"both","age":"overall","ethnicity":"overall","population":259.8}];
 let dosmDistrictRows=[];
 let dosmDistrictGeoJSON=null;
 let dosmDistrictLayer=null;
@@ -334,33 +335,10 @@ async function syncOpenDOSM(showToast=true){
  const status=document.getElementById("dosmSourceStatus");
  const syncText=document.getElementById("dosmSyncText");
 
- function setState(source, rows, latest){
-   dosmDistrictRows=rows;
-   dosmDistrictGeoJSON=makeDOSMGeoJSON(dosmDistrictRows);
-   if(!dosmDistrictGeoJSON.features.length)throw new Error("No Selangor district features matched the centroid lookup.");
-
-   dataManager.register("dosm-district-population",{
-     name:"OpenDOSM Selangor District Population",
-     type:"Official DOSM statistics + centroid visualisation",
-     status:"Live",
-     geojson:dosmDistrictGeoJSON,
-     rows:dosmDistrictRows,
-     sourceUrl:source,
-     latestDate:latest
-   });
-
-   if(status){status.textContent="Live";status.className="ok";}
-   if(syncText){syncText.textContent="Synced";syncText.className="ok";}
-   if(document.getElementById("dosmLatestYear"))document.getElementById("dosmLatestYear").textContent=(latest||"—").slice(0,4);
-   if(document.getElementById("dosmDistrictCount"))document.getElementById("dosmDistrictCount").textContent=dosmDistrictRows.length;
-   renderLayers();
- }
-
  function normaliseRecords(records){
-   const arr=(records||[]).filter(Boolean);
-   const sel=arr.filter(r=>
+   const sel=(records||[]).filter(r=>
      String(r.state||"").trim().toLowerCase()==="selangor" &&
-     ["both","overall"].includes(String(r.sex||"").trim().toLowerCase()) &&
+     String(r.sex||"").trim().toLowerCase()==="both" &&
      String(r.age||"").trim().toLowerCase()==="overall" &&
      String(r.ethnicity||"").trim().toLowerCase()==="overall"
    );
@@ -370,63 +348,46 @@ async function syncOpenDOSM(showToast=true){
      date:String(r.date),
      state:String(r.state),
      district:String(r.district).trim(),
-     population:Number(String(r.population).replace(/,/g,""))
+     population:Number(r.population)
    })).filter(r=>Number.isFinite(r.population));
    return {rows,latest};
  }
 
+ function activate(records, sourceLabel){
+   const parsed=normaliseRecords(records);
+   if(parsed.rows.length<9)throw new Error("Expected 9 Selangor districts but found "+parsed.rows.length+".");
+   dosmDistrictRows=parsed.rows;
+   dosmDistrictGeoJSON=makeDOSMGeoJSON(dosmDistrictRows);
+   dataManager.register("dosm-district-population",{
+     name:"OpenDOSM Selangor District Population",
+     type:"Official DOSM bundled statistics + centroid visualisation",
+     status:"Ready",
+     geojson:dosmDistrictGeoJSON,
+     rows:dosmDistrictRows,
+     allRows:records,
+     sourceUrl:"https://storage.dosm.gov.my/population/population_district.csv",
+     latestDate:parsed.latest,
+     sourceMode:sourceLabel
+   });
+   if(status){status.textContent="Bundled";status.className="ok";}
+   if(syncText){syncText.textContent=sourceLabel;syncText.className="ok";}
+   if(document.getElementById("dosmLatestYear"))document.getElementById("dosmLatestYear").textContent=(parsed.latest||"—").slice(0,4);
+   if(document.getElementById("dosmDistrictCount"))document.getElementById("dosmDistrictCount").textContent=parsed.rows.length;
+   renderLayers();
+   return true;
+ }
+
+ // PRIMARY: bundled official data. This works on GitHub Pages without CORS.
  try{
-   if(status){status.textContent="Syncing...";status.className="";}
-   if(syncText)syncText.textContent="Connecting API";
-
-   // 1) PRIMARY: Malaysia official OpenAPI (normally browser/CORS friendly)
-   try{
-     const apiResp=await fetch(CONFIG.dosmDistrictAPI,{cache:"no-store",mode:"cors"});
-     if(!apiResp.ok)throw new Error("OpenAPI HTTP "+apiResp.status);
-     const raw=await apiResp.json();
-
-     // Handle common response shapes: array, {data:[...]}, {results:[...]}
-     const records=Array.isArray(raw)?raw:
-       Array.isArray(raw.data)?raw.data:
-       Array.isArray(raw.results)?raw.results:[];
-
-     const parsed=normaliseRecords(records);
-     if(parsed.rows.length>=9){
-       setState(CONFIG.dosmDistrictAPI,parsed.rows,parsed.latest);
-       if(showToast)toast("OpenDOSM synced via official API.");
-       return true;
-     }
-     throw new Error("OpenAPI returned only "+parsed.rows.length+" matching Selangor districts.");
-   }catch(apiErr){
-     console.warn("DOSM API attempt failed:",apiErr);
-     if(syncText)syncText.textContent="API failed · trying CSV";
-   }
-
-   // 2) FALLBACK: official OpenDOSM CSV
-   try{
-     const response=await fetch(CONFIG.dosmDistrictCSV,{cache:"no-store",mode:"cors"});
-     if(!response.ok)throw new Error("CSV HTTP "+response.status);
-     const text=await response.text();
-     if(!text || !text.includes("district"))throw new Error("CSV response is empty or invalid.");
-     const parsedCSV=Papa.parse(text,{header:true,skipEmptyLines:true,dynamicTyping:false});
-     if(parsedCSV.errors && parsedCSV.errors.length && !parsedCSV.data.length)throw new Error(parsedCSV.errors[0].message);
-
-     const parsed=normaliseRecords(parsedCSV.data);
-     if(parsed.rows.length<9)throw new Error("CSV returned only "+parsed.rows.length+" matching Selangor districts.");
-     setState(CONFIG.dosmDistrictCSV,parsed.rows,parsed.latest);
-     if(showToast)toast("OpenDOSM synced via official CSV.");
-     return true;
-   }catch(csvErr){
-     console.warn("DOSM CSV attempt failed:",csvErr);
-     throw new Error("DOSM connection failed. API: unavailable; CSV: "+csvErr.message);
-   }
-
- }catch(err){
-   console.error("OpenDOSM sync failed:",err);
-   if(status){status.textContent="Offline";status.className="";}
-   if(syncText)syncText.textContent="Connection failed";
-   if(showToast)toast("OpenDOSM connection failed. See Processing Console.");
-   window.__DOSM_LAST_ERROR=err.message;
+   activate(BUNDLED_DOSM_SELANGOR,"Official data bundled");
+   if(showToast)toast("Official DOSM Selangor data loaded locally.");
+   return true;
+ }catch(bundleErr){
+   console.error("Bundled DOSM data failed:",bundleErr);
+   if(status)status.textContent="Data error";
+   if(syncText)syncText.textContent="Bundled data invalid";
+   window.__DOSM_LAST_ERROR=bundleErr.message;
+   if(showToast)toast("Bundled DOSM data error.");
    return false;
  }
 }
@@ -515,7 +476,7 @@ const modules={
    }
  }
 };
-function resultBase(module,geojson,total,coverage,critical,execution,stats,ai,actions,method){const counts=[1,2,3,4].map(c=>geojson.features.filter(f=>f.properties.class===c).length);return{type:currentAnalysis,label:module.label,geojson,total,coverage,critical,units:geojson.features.length,executionMs:Math.round(execution),timestamp:Date.now(),classCounts:counts,statistics:stats,aiInsight:ai,actions,metadata:{input:"Synthetic Phase 1 demo datasets",method,crs:"WGS84 / EPSG:4326",engineVersion:CONFIG.version,confidence:"Prototype / validation mode"}}}
+function resultBase(module,geojson,total,coverage,critical,execution,stats,ai,actions,method){const counts=[1,2,3,4].map(c=>geojson.features.filter(f=>f.properties.class===c).length);return{type:currentAnalysis,label:module.label,geojson,total,coverage,critical,units:geojson.features.length,executionMs:Math.round(execution),timestamp:Date.now(),classCounts:counts,statistics:stats,aiInsight:ai,actions,metadata:{input:currentAnalysis==="dosm-district-population"?"Official OpenDOSM bundled district statistics":"Synthetic Phase 1 demo datasets",method,crs:"WGS84 / EPSG:4326",engineVersion:CONFIG.version,confidence:"Prototype / validation mode"}}}
 
 /* Map */
 const map=L.map("map",{zoomControl:false}).setView(CONFIG.home,CONFIG.zoom);
@@ -609,7 +570,7 @@ $("clearResult").onclick=()=>{currentResult=null;clearMapResults();resetResultUI
 $("resetWorkspace").onclick=()=>{currentResult=null;clearMapResults();resetResultUI();selectAnalysis("population-density");map.setView(CONFIG.home,CONFIG.zoom);toast("Workspace reset.")};
 $("clearHistory").onclick=()=>{historyManager.clear();renderHistory();toast("History cleared.")};
 $("exportGeoJSON").onclick=()=>currentResult&&download("SUO_"+currentResult.type+"_result.geojson",JSON.stringify(currentResult.geojson,null,2),"application/geo+json");
-$("exportReport").onclick=()=>{if(!currentResult)return;const r=currentResult;download("SUO_"+r.type+"_report.txt",["SELANGOR URBAN OBSERVATORY","SPATIAL ANALYTICS ENGINE v4.1.1 HOTFIX","",`Analysis: ${r.label}`,`Date: ${new Date(r.timestamp).toLocaleString()}`,`Population: ${Math.round(r.total).toLocaleString()}`,`Coverage: ${r.coverage==null?"N/A":r.coverage.toFixed(1)+"%"}`,`Critical Areas: ${r.critical}`,`Analysis Units: ${r.units}`,`Execution: ${r.executionMs} ms`,"","URBAN PLANNING AI INSIGHT",r.aiInsight,"","RECOMMENDED ACTIONS",...r.actions.map((x,i)=>`${i+1}. ${x}`),"","NOTE","v4.1 integrates official OpenDOSM district population statistics. Other Phase 1 spatial layers remain synthetic until verified geometry/facility layers are connected."].join("\n"),"text/plain")};
+$("exportReport").onclick=()=>{if(!currentResult)return;const r=currentResult;download("SUO_"+r.type+"_report.txt",["SELANGOR URBAN OBSERVATORY","SPATIAL ANALYTICS ENGINE v4.1.2 BUNDLED","",`Analysis: ${r.label}`,`Date: ${new Date(r.timestamp).toLocaleString()}`,`Population: ${Math.round(r.total).toLocaleString()}`,`Coverage: ${r.coverage==null?"N/A":r.coverage.toFixed(1)+"%"}`,`Critical Areas: ${r.critical}`,`Analysis Units: ${r.units}`,`Execution: ${r.executionMs} ms`,"","URBAN PLANNING AI INSIGHT",r.aiInsight,"","RECOMMENDED ACTIONS",...r.actions.map((x,i)=>`${i+1}. ${x}`),"","NOTE","v4.1.2 bundles official OpenDOSM Selangor district population totals for 2020–2025. Other Phase 1 spatial layers remain synthetic until verified geometry/facility layers are connected."].join("\n"),"text/plain")};
 $("send3D").onclick=()=>toast("GeoPortal handoff is prepared; configure production URL/API next.");
 $("openGeoportal").onclick=()=>CONFIG.geoportalUrl?window.open(CONFIG.geoportalUrl,"_blank"):toast("Set production 3D GeoPortal URL in CONFIG.geoportalUrl.");
 $("architectureBtn").onclick=showArchitecture;$("modalClose").onclick=()=>$("modalBack").classList.remove("show");$("modalBack").onclick=e=>{if(e.target===$("modalBack"))$("modalBack").classList.remove("show")};
@@ -619,6 +580,7 @@ $("fileInput").onchange=e=>{const file=e.target.files[0];if(!file)return;const r
 $("syncDOSMBtn").onclick=()=>syncOpenDOSM(true);
 
 renderLayers();renderHistory();selectAnalysis("population-density");
+syncOpenDOSM(false);
 })();
 </script>
 </body>
