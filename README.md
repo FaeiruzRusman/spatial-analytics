@@ -1,18 +1,15 @@
-# SUO Spatial Analytics Engine v4.1.3 DISTRICT FIX
+# SUO Spatial Analytics Engine v4.1.4 HARD FIX
 
-Fixes missing Hulu Langat and Hulu Selangor results.
+Fixes persistent 7-of-9 DOSM district output.
 
-Cause:
-OpenDOSM official district names are:
-- Ulu Langat
-- Ulu Selangor
+## Hard fix
+- Canonical district name normalisation
+- Ulu Langat -> Hulu Langat
+- Ulu Selangor -> Hulu Selangor
+- whitespace / non-breaking-space cleanup
+- exact 9-district validation before analysis
+- exact 9-feature validation after geometry creation
+- original DOSM district name preserved for traceability
 
-The map centroid lookup previously only contained:
-- Hulu Langat
-- Hulu Selangor
-
-v4.1.3 adds aliases for both official DOSM names while displaying the preferred portal labels:
-- Hulu Langat
-- Hulu Selangor
-
-The official source names are still preserved in the popup for traceability.
+Expected:
+Analysis Units = 9
