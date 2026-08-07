@@ -1,0 +1,8 @@
+{
+  "appName": "SUO Spatial Analytics Engine",
+  "version": "2.0",
+  "phase": "Core Engine + Phase 1 Analytics",
+  "geoportalUrl": "SET_PRODUCTION_GEO_PORTAL_URL_HERE",
+  "portalUrl": "SET_PRODUCTION_SUO_PORTAL_URL_HERE",
+  "dataMode": "synthetic-demo"
+}

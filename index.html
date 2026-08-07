@@ -1,142 +1,223 @@
 <!DOCTYPE html>
-<html lang="ms">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SUO Spatial Analytics Engine</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-  <link rel="stylesheet" href="styles.css">
+  <title>SUO Spatial Analytics Engine v2.0</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <link rel="stylesheet" href="css/styles.css"/>
 </head>
 <body>
-<div class="app-shell">
-  <aside class="sidebar">
+<div id="app">
+
+  <aside class="left-shell">
     <div class="brand">
-      <div class="logo">SUO</div>
+      <div class="brand-mark">SUO</div>
       <div>
-        <h1>Spatial Analytics</h1>
-        <small>Selangor Urban Observatory</small>
+        <div class="brand-title">Spatial Analytics</div>
+        <div class="brand-subtitle">Selangor Urban Observatory</div>
       </div>
     </div>
 
-    <div class="section-title">ANALYSIS CATALOG</div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" data-lefttab="library">Analysis Library</button>
+      <button class="nav-tab" data-lefttab="data">Data Manager</button>
+      <button class="nav-tab" data-lefttab="history">History</button>
+    </div>
 
-    <button class="tool active" data-tool="density">
-      <span>01</span>
-      <div><b>Population Density</b><small>Grid-based population analysis</small></div>
-    </button>
+    <section id="left-library" class="left-view active">
+      <div class="search-wrap">
+        <input id="analysisSearch" type="text" placeholder="Search analysis..."/>
+      </div>
 
-    <button class="tool" data-tool="access">
-      <span>02</span>
-      <div><b>Facility Accessibility</b><small>Buffer & service coverage</small></div>
-    </button>
+      <div class="analysis-group">
+        <div class="group-title">DEMOGRAPHY</div>
+        <button class="analysis-item active" data-analysis="population-density">
+          <span class="icon">PD</span><span><b>Population Density</b><small>Grid population concentration</small></span>
+        </button>
+        <button class="analysis-item disabled" data-analysis="population-growth">
+          <span class="icon">PG</span><span><b>Population Growth</b><small>Coming next</small></span>
+        </button>
+      </div>
 
-    <button class="tool" data-tool="gap">
-      <span>03</span>
-      <div><b>Urban Service Gap</b><small>Population vs facility gap</small></div>
-    </button>
+      <div class="analysis-group">
+        <div class="group-title">ACCESSIBILITY</div>
+        <button class="analysis-item" data-analysis="facility-accessibility">
+          <span class="icon">FA</span><span><b>Facility Accessibility</b><small>Service coverage analysis</small></span>
+        </button>
+        <button class="analysis-item disabled"><span class="icon">PT</span><span><b>Public Transport Access</b><small>Coming next</small></span></button>
+        <button class="analysis-item disabled"><span class="icon">OS</span><span><b>Open Space Access</b><small>Coming next</small></span></button>
+      </div>
 
-    <div class="section-title">DATA</div>
-    <label class="upload">
-      Import GeoJSON
-      <input id="geojsonUpload" type="file" accept=".geojson,.json" hidden />
-    </label>
+      <div class="analysis-group">
+        <div class="group-title">URBAN</div>
+        <button class="analysis-item" data-analysis="urban-service-gap">
+          <span class="icon">UG</span><span><b>Urban Service Gap</b><small>Population vs access gap</small></span>
+        </button>
+        <button class="analysis-item disabled"><span class="icon">DP</span><span><b>Development Pressure</b><small>Coming next</small></span></button>
+        <button class="analysis-item disabled"><span class="icon">UC</span><span><b>Urban Change</b><small>Coming next</small></span></button>
+      </div>
 
-    <button class="secondary" id="resetBtn">Reset Workspace</button>
+      <div class="analysis-group">
+        <div class="group-title">PLANNING</div>
+        <button class="analysis-item disabled"><span class="icon">SS</span><span><b>Site Suitability</b><small>Phase 2 module</small></span></button>
+        <button class="analysis-item disabled"><span class="icon">TD</span><span><b>TOD Potential</b><small>Phase 2 module</small></span></button>
+        <button class="analysis-item disabled"><span class="icon">DC</span><span><b>Development Constraint</b><small>Phase 2 module</small></span></button>
+      </div>
+
+      <div class="analysis-group">
+        <div class="group-title">ENVIRONMENT</div>
+        <button class="analysis-item disabled"><span class="icon">FL</span><span><b>Flood Exposure</b><small>Phase 2 module</small></span></button>
+        <button class="analysis-item disabled"><span class="icon">KS</span><span><b>KSAS Conflict</b><small>Phase 2 module</small></span></button>
+      </div>
+    </section>
+
+    <section id="left-data" class="left-view">
+      <div class="panel-mini">
+        <h4>Registered Layers</h4>
+        <div id="layerList"></div>
+      </div>
+
+      <label class="upload-btn">
+        + Import GeoJSON
+        <input id="geojsonUpload" type="file" accept=".geojson,.json" hidden/>
+      </label>
+
+      <div class="panel-mini">
+        <h4>Data Sources</h4>
+        <div class="source-row"><span>Population Demo</span><em class="ok">Ready</em></div>
+        <div class="source-row"><span>Facilities Demo</span><em class="ok">Ready</em></div>
+        <div class="source-row"><span>DOSM Population</span><em>Not linked</em></div>
+        <div class="source-row"><span>PBT Boundary</span><em>Not linked</em></div>
+      </div>
+    </section>
+
+    <section id="left-history" class="left-view">
+      <div class="history-head">
+        <span>Recent Analyses</span>
+        <button id="clearHistoryBtn">Clear</button>
+      </div>
+      <div id="historyList" class="history-list"></div>
+    </section>
+
+    <div class="left-footer">
+      <button id="resetWorkspaceBtn">Reset Workspace</button>
+      <div>Spatial Analytics Engine · v2.0</div>
+    </div>
   </aside>
 
-  <main class="workspace">
+  <main class="center-shell">
     <header class="topbar">
       <div>
-        <h2 id="workspaceTitle">Population Density</h2>
-        <p id="workspaceDesc">Analyse population concentration using spatial grid units.</p>
+        <h1 id="analysisTitle">Population Density</h1>
+        <p id="analysisSubtitle">Analyse population concentration using spatial grid units.</p>
       </div>
-      <div class="status"><span></span> Engine Ready</div>
+      <div class="top-actions">
+        <span class="engine-status"><i></i> Engine Ready</span>
+        <button id="openGeoportalBtn">Open 3D GeoPortal</button>
+      </div>
     </header>
 
-    <div class="content-grid">
-      <section class="map-panel">
-        <div id="map"></div>
-        <div class="map-tag">SUO SPATIAL ANALYTICS ENGINE · PHASE 1</div>
-      </section>
+    <div class="map-shell">
+      <div id="map"></div>
 
-      <section class="control-panel">
-        <div class="panel-card">
-          <h3>Analysis Parameters</h3>
+      <div class="map-toolbar">
+        <button id="homeMapBtn" title="Home">⌂</button>
+        <button id="togglePopulationBtn" class="active" title="Population layer">P</button>
+        <button id="toggleResultBtn" class="active" title="Result layer">R</button>
+      </div>
 
-          <div id="densityControls" class="controls">
-            <label>Grid Size
-              <select id="gridSize">
-                <option value="2">2 km</option>
-                <option value="5" selected>5 km</option>
-                <option value="10">10 km</option>
-              </select>
-            </label>
-          </div>
-
-          <div id="accessControls" class="controls hidden">
-            <label>Facility Type
-              <select id="facilityType">
-                <option value="hospital">Hospital</option>
-                <option value="school">School</option>
-                <option value="police">Police</option>
-              </select>
-            </label>
-            <label>Coverage Distance
-              <select id="bufferDistance">
-                <option value="1">1 km</option>
-                <option value="3" selected>3 km</option>
-                <option value="5">5 km</option>
-                <option value="10">10 km</option>
-              </select>
-            </label>
-          </div>
-
-          <div id="gapControls" class="controls hidden">
-            <label>Population Weight
-              <input id="popWeight" type="range" min="0" max="100" value="60">
-              <span id="popWeightValue">60%</span>
-            </label>
-            <label>Accessibility Weight
-              <input id="accessWeight" type="range" min="0" max="100" value="40">
-              <span id="accessWeightValue">40%</span>
-            </label>
-          </div>
-
-          <button class="run" id="runBtn">Run Analysis</button>
-        </div>
-
-        <div class="panel-card">
-          <h3>Result Summary</h3>
-          <div class="kpi-grid">
-            <div class="kpi"><strong id="kpiPopulation">—</strong><span>Population</span></div>
-            <div class="kpi"><strong id="kpiCoverage">—</strong><span>Coverage</span></div>
-            <div class="kpi"><strong id="kpiCritical">—</strong><span>Critical Areas</span></div>
-            <div class="kpi"><strong id="kpiUnits">—</strong><span>Analysis Units</span></div>
-          </div>
-        </div>
-
-        <div class="panel-card">
-          <div class="card-head">
-            <h3>Urban Intelligence</h3>
-            <button class="mini" id="exportBtn" disabled>Export GeoJSON</button>
-          </div>
-          <p id="insight">Run an analysis to generate spatial intelligence.</p>
-        </div>
-
-        <div class="panel-card">
-          <h3>Legend</h3>
-          <div class="legend"><i class="c1"></i> Low</div>
-          <div class="legend"><i class="c2"></i> Moderate</div>
-          <div class="legend"><i class="c3"></i> High</div>
-          <div class="legend"><i class="c4"></i> Critical</div>
-        </div>
-      </section>
+      <div class="map-status">
+        <span>SUO SPATIAL ANALYTICS ENGINE</span>
+        <span id="mapStatusText">Workspace Ready</span>
+      </div>
     </div>
+
+    <section class="bottom-results">
+      <div class="result-tabs">
+        <button class="result-tab active" data-resulttab="summary">Summary</button>
+        <button class="result-tab" data-resulttab="statistics">Statistics</button>
+        <button class="result-tab" data-resulttab="chart">Chart</button>
+        <button class="result-tab" data-resulttab="ai">AI Insight</button>
+        <button class="result-tab" data-resulttab="metadata">Metadata</button>
+      </div>
+
+      <div id="result-summary" class="result-view active">
+        <div class="kpi-row">
+          <div class="kpi"><span>Population</span><strong id="kpiPopulation">—</strong></div>
+          <div class="kpi"><span>Coverage</span><strong id="kpiCoverage">—</strong></div>
+          <div class="kpi"><span>Critical Areas</span><strong id="kpiCritical">—</strong></div>
+          <div class="kpi"><span>Analysis Units</span><strong id="kpiUnits">—</strong></div>
+          <div class="kpi"><span>Execution</span><strong id="kpiExecution">—</strong></div>
+        </div>
+      </div>
+
+      <div id="result-statistics" class="result-view">
+        <div id="statisticsContent" class="result-text">Run an analysis to calculate statistics.</div>
+      </div>
+
+      <div id="result-chart" class="result-view">
+        <div id="barChart" class="bar-chart"></div>
+      </div>
+
+      <div id="result-ai" class="result-view">
+        <div class="ai-card">
+          <div class="ai-head"><span>Urban Planning AI</span><em>Decision Support</em></div>
+          <div id="aiInsight">Run an analysis to generate an interpretation.</div>
+        </div>
+      </div>
+
+      <div id="result-metadata" class="result-view">
+        <div id="metadataContent" class="result-text">No analysis metadata yet.</div>
+      </div>
+    </section>
   </main>
+
+  <aside class="right-shell">
+
+    <section class="right-card">
+      <div class="step-title"><span>01</span> Input Data</div>
+      <div id="inputDataContent" class="step-content"></div>
+    </section>
+
+    <section class="right-card">
+      <div class="step-title"><span>02</span> Parameters</div>
+      <div id="parameterContent" class="step-content"></div>
+    </section>
+
+    <section class="right-card process-card">
+      <div class="step-title"><span>03</span> Processing</div>
+      <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+      <div id="processStatus" class="process-status">Ready to run.</div>
+      <div id="processLog" class="process-log"></div>
+      <button id="runAnalysisBtn" class="primary-btn">Run Analysis</button>
+    </section>
+
+    <section class="right-card">
+      <div class="step-title"><span>04</span> Result</div>
+      <div class="action-grid">
+        <button id="exportGeoJSONBtn" disabled>Export GeoJSON</button>
+        <button id="exportReportBtn" disabled>Export Report</button>
+        <button id="view3DBtn" disabled>View in 3D GeoPortal</button>
+        <button id="clearResultBtn">Clear Result</button>
+      </div>
+    </section>
+
+    <section class="right-card">
+      <div class="step-title"><span>05</span> Legend</div>
+      <div class="legend-row"><i class="l1"></i><span>Low</span></div>
+      <div class="legend-row"><i class="l2"></i><span>Moderate</span></div>
+      <div class="legend-row"><i class="l3"></i><span>High</span></div>
+      <div class="legend-row"><i class="l4"></i><span>Critical</span></div>
+    </section>
+
+  </aside>
 </div>
+
+<div id="toast"></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@turf/turf@7/turf.min.js"></script>
-<script src="app.js"></script>
+<script type="module" src="js/app.js"></script>
 </body>
 </html>

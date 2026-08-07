@@ -1,34 +1,78 @@
-# SUO Spatial Analytics Engine v1.0
+# SUO Spatial Analytics Engine v2.0
 
-Standalone Phase 1 analytics workspace for the Selangor Urban Observatory portal.
+This version restructures Spatial Analytics as an enterprise-style analytics workspace rather than a simple GIS viewer.
 
-Included modules:
-- Population Density
-- Facility Accessibility
-- Urban Service Gap
+## Architecture
 
-Technology:
+- Data Manager
+- Analysis Manager
+- Workflow Manager
+- Result Manager / UI
+- History Manager
+- Export Manager
+- Urban Planning AI Insight panel
+
+## Functional Phase 1 modules
+
+1. Population Density
+2. Facility Accessibility
+3. Urban Service Gap
+
+## Planned Analysis Library
+
+- Population Growth
+- Public Transport Accessibility
+- Open Space Accessibility
+- Development Pressure
+- Urban Change
+- Site Suitability
+- TOD Potential
+- Development Constraint
+- Flood Exposure
+- KSAS Conflict
+
+## Technology
+
 - Leaflet
 - Turf.js
+- ES Modules
 - OpenStreetMap
-- Browser-side spatial processing
+- Browser-side analytics
+- LocalStorage for analysis history
 - GeoJSON import/export
 
-Important:
-The current population and facility layers are synthetic demo datasets.
-Replace `populationGeoJSON` and `facilityGeoJSON` in `app.js` with verified SUO / DOSM datasets before production.
+## Repository Deployment
 
-Portal position:
-SUO Portal → Urban Intelligence & Analytics → Spatial Analytics → Launch Spatial Analytics Engine
+Upload all files and folders to the root of:
 
-The 3D GeoPortal remains under Digital Applications as the main spatial visualisation application.
+`https://github.com/FaeiruzRusman/spatial-analytics`
 
-Recommended next development:
-- Connect real DOSM population data
-- Connect verified hospital / school / police datasets
-- PBT / district filtering
-- Result history
-- Site Suitability
-- Change Detection
-- PostGIS / Python backend for heavier analytics
-- View Result in 3D GeoPortal
+GitHub Pages URL:
+
+`https://faeiruzrusman.github.io/spatial-analytics/`
+
+## Important
+
+The current Phase 1 population and facility data are synthetic demonstration datasets.
+
+Before production use, replace them with verified:
+- DOSM population data
+- PBT / district boundaries
+- Hospitals / clinics
+- Schools
+- Police / fire facilities
+- Land-use / planning datasets
+
+## Portal Position
+
+SUO Portal
+→ Urban Intelligence & Analytics
+→ Spatial Analytics
+→ Spatial Analytics Engine
+
+3D GeoPortal remains under:
+SUO Portal
+→ Digital Applications
+→ 3D GeoPortal (Main Application)
+
+Spatial Analytics results will later be sent to / opened in the 3D GeoPortal.
