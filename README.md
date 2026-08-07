@@ -1,64 +1,43 @@
-# SUO Spatial Analytics Engine v3.0 Enterprise
+# SUO Spatial Analytics Engine v4.0 FINAL
 
-## Deployment
+Single-file enterprise frontend/core-engine build for GitHub Pages.
 
-This version is deliberately packaged with a **single self-contained `index.html`** for GitHub Pages.
-
+## Deploy
 Upload `index.html` to the root of:
-
 https://github.com/FaeiruzRusman/spatial-analytics
 
-Your Pages URL remains:
-
+GitHub Pages:
 https://faeiruzrusman.github.io/spatial-analytics/
 
-No separate local CSS or JS files are required. The only external dependencies are:
-- Leaflet CSS/JS from CDN
-- Turf.js from CDN
-- OpenStreetMap tiles
-
-## Core Engine
-
-- Data Manager
-- Analysis Manager
-- Workflow / Processing Manager
-- Result Manager
-- History Manager
-- Export Manager
-- Urban Planning AI Insight
-- Prepared GeoPortal handoff
-
-## Functional Phase 1 Analysis
-
-1. Population Density
-2. Facility Accessibility
-3. Urban Service Gap
-
-## Planned Modules
-
-- Population Growth / Projection
-- Public Transport Accessibility
-- Open Space Accessibility
-- Development Pressure
-- Urban Change Detection
-- Site Suitability
-- TOD Potential
-- Development Constraint
-- Flood Exposure
-- KSAS Conflict
+## Functional
+- Population Density
+- Facility Accessibility
+- Urban Service Gap
+- Analysis Catalog information
+- Data Manager + GeoJSON import
+- Workflow/processing console
+- KPI, statistics, bar chart, donut chart
+- Urban Planning AI insight + recommended actions
+- Analysis history
+- GeoJSON export
+- text report export
+- map home/population/result toggles
+- basemap switch
+- geolocation
+- simple two-point distance measurement
+- fullscreen
+- print
+- prepared 3D GeoPortal handoff
 
 ## Important
+Current Phase 1 datasets remain synthetic demo datasets.
+Replace with verified SUO / DOSM / PBT datasets before operational use.
 
-Current Phase 1 datasets are synthetic and are only for validating the engine.
-Replace them with verified SUO / DOSM datasets before operational use.
-
-## Portal Architecture
-
-SUO Portal
-→ Urban Intelligence & Analytics
-→ Spatial Analytics Engine
-
-3D GeoPortal remains:
-SUO Portal
-→ Digital Applications
-→ 3D GeoPortal (Main App)
+## Next production integration
+1. DOSM population
+2. PBT / district boundaries
+3. Verified health / school / police datasets
+4. SUO Data Hub API
+5. 3D GeoPortal handoff URL/API
+6. Site Suitability
+7. Change Detection

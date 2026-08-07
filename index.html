@@ -3,36 +3,35 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>SUO Spatial Analytics Engine v3.0</title>
-<link rel="preconnect" href="https://unpkg.com">
+<title>SUO Spatial Analytics Engine v4.0 FINAL</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
 :root{
- --bg:#06111b;--shell:#071725;--panel:#0b2132;--panel2:#0e2a40;--line:#21465f;
- --line2:#315f7d;--text:#eef8ff;--muted:#89a6ba;--accent:#ffb000;--accent2:#ff7a00;
- --ok:#39d98a;--blue:#2f80ed;--cyan:#43b8ff;--red:#ef4444;--yellow:#f59e0b;
- --shadow:0 10px 30px rgba(0,0,0,.25);
+ --bg:#06111b;--shell:#071725;--panel:#0a1f30;--panel2:#0d2a40;--panel3:#10344d;
+ --line:#214a63;--line2:#34627e;--text:#eef8ff;--muted:#83a3b8;
+ --accent:#ffb000;--accent2:#ff7a00;--ok:#39d98a;--blue:#2f80ed;--cyan:#43b8ff;
+ --red:#ef4444;--orange:#f59e0b;--shadow:0 10px 30px rgba(0,0,0,.22)
 }
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif;overflow:hidden}
-button,input,select{font:inherit}
-button{cursor:pointer}
-#app{height:100%;display:grid;grid-template-columns:290px minmax(620px,1fr) 365px}
+button,input,select{font:inherit} button{cursor:pointer}
+#app{height:100%;display:grid;grid-template-columns:300px minmax(640px,1fr) 370px}
 
 /* LEFT */
 .left{background:#061522;border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
-.brand{height:72px;display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid #17364b}
-.brandmark{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#111;font-weight:950;font-size:12px}
+.brand{height:74px;display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid #17364b}
+.brandmark{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#111;font-weight:950;font-size:12px;box-shadow:0 6px 18px rgba(255,176,0,.18)}
 .brand h1{font-size:15px;margin:0}.brand p{margin:3px 0 0;font-size:9px;color:var(--muted)}
-.left-tabs{display:grid;grid-template-columns:1.15fr .9fr .7fr;border-bottom:1px solid #17364b}
+.left-tabs{display:grid;grid-template-columns:1.2fr .9fr .7fr;border-bottom:1px solid #17364b}
 .left-tab{background:#071827;border:0;color:#7899ad;padding:10px 4px;font-size:9px}.left-tab.active{color:#ffd166;background:#0b2436;border-bottom:2px solid var(--accent)}
 .left-body{display:none;overflow:auto;min-height:0;flex:1;padding:11px}.left-body.active{display:block}
 .search{width:100%;border:1px solid #264e68;background:#061522;color:#fff;border-radius:8px;padding:9px 10px;font-size:10px;outline:none}
 .group{margin-top:14px}.group-title{font-size:8px;letter-spacing:.15em;color:#66889f;margin:0 4px 7px}
-.tool{display:flex;width:100%;gap:9px;align-items:center;border:1px solid transparent;background:transparent;color:#dcecf6;border-radius:10px;padding:8px;text-align:left;margin-bottom:4px}
-.tool:hover{background:#0a2132}.tool.active{background:#0f2d43;border-color:#34647f}.tool.disabled{opacity:.36;cursor:default}
-.tool-icon{width:29px;height:29px;border-radius:8px;background:#0d2b40;display:grid;place-items:center;font-size:8px;font-weight:900;color:#9dc3d8;flex:0 0 auto}
+.tool{display:flex;width:100%;gap:9px;align-items:center;border:1px solid transparent;background:transparent;color:#dcecf6;border-radius:10px;padding:8px;text-align:left;margin-bottom:4px;position:relative}
+.tool:hover{background:#0a2132}.tool.active{background:#0f2d43;border-color:#34647f}.tool.disabled{opacity:.34;cursor:default}
+.tool-icon{width:30px;height:30px;border-radius:8px;background:#0d2b40;display:grid;place-items:center;font-size:8px;font-weight:900;color:#9dc3d8;flex:0 0 auto}
 .tool.active .tool-icon{background:var(--accent);color:#111}.tool b{font-size:10px;display:block}.tool small{font-size:8px;color:#7899ad;display:block;margin-top:3px}
+.tool .info-btn{margin-left:auto;border:0;background:transparent;color:#7596aa;font-size:10px;padding:4px}.tool .info-btn:hover{color:#ffd166}
 .mini-card{background:#091e2e;border:1px solid #214860;border-radius:10px;padding:10px;margin-bottom:8px}.mini-card h4{font-size:9px;margin:0 0 8px}
 .data-row{display:flex;align-items:center;justify-content:space-between;gap:7px;font-size:8px;padding:6px 0;border-bottom:1px solid #17364b}.data-row:last-child{border:0}.data-row em{font-style:normal;color:#6d91a6}.data-row em.ok{color:var(--ok)}
 .upload{display:block;border:1px dashed #3d6b86;background:#0a2234;border-radius:9px;padding:9px;text-align:center;font-size:9px;color:#dcecf6;cursor:pointer;margin-bottom:8px}
@@ -40,483 +39,364 @@ button{cursor:pointer}
 .left-foot{border-top:1px solid #17364b;padding:9px 11px;color:#5f8298;font-size:7px}.left-foot button{width:100%;padding:8px;border-radius:8px;border:1px solid #284f68;background:#081b2a;color:#cfe2ee;font-size:8px;margin-bottom:7px}
 
 /* CENTER */
-.center{display:grid;grid-template-rows:72px minmax(330px,1fr) 230px;min-width:0;background:#081520}
+.center{display:grid;grid-template-rows:74px minmax(330px,1fr) 260px;min-width:0;background:#081520}
 .topbar{display:flex;justify-content:space-between;align-items:center;padding:10px 15px;border-bottom:1px solid var(--line);background:#081827}
 .topbar h2{margin:0;font-size:16px}.topbar p{font-size:9px;color:var(--muted);margin:4px 0 0}
 .top-actions{display:flex;gap:8px;align-items:center}.engine{font-size:8px;color:#9ab4c5}.engine i{display:inline-block;width:7px;height:7px;background:var(--ok);border-radius:50%;margin-right:5px}
 .top-actions button{padding:8px 10px;border-radius:8px;border:1px solid #315d77;background:#0d2a3f;color:#dcecf5;font-size:8px}
+.top-actions button:hover{border-color:#527d97}
 
 .map-wrap{position:relative;min-height:0}.map-wrap #map{height:100%;width:100%;background:#0c1b27}
-.map-tools{position:absolute;z-index:500;top:12px;left:12px;display:flex;flex-direction:column;gap:5px}.map-tools button{width:31px;height:31px;border:1px solid #315f7c;border-radius:7px;background:#061522;color:#dfeef7;font-size:9px}.map-tools button.active{background:#123b56;color:#ffd166}
+.map-tools{position:absolute;z-index:500;top:12px;left:12px;display:flex;flex-direction:column;gap:5px}
+.map-tools button{width:34px;height:34px;border:1px solid #315f7c;border-radius:8px;background:#061522;color:#dfeef7;font-size:8px;font-weight:700}
+.map-tools button.active{background:#123b56;color:#ffd166;border-color:#4f7991}
 .map-badge{position:absolute;z-index:500;left:12px;bottom:12px;border:1px solid #315f7c;background:rgba(5,18,29,.9);border-radius:8px;padding:7px 9px;font-size:7px;color:#9ab6c8;display:flex;gap:13px}
 .coord{position:absolute;right:12px;bottom:12px;z-index:500;background:rgba(5,18,29,.88);border:1px solid #315f7c;border-radius:7px;padding:6px 8px;font-size:7px;color:#88a7bb}
+.measure-box{position:absolute;left:56px;top:12px;z-index:600;background:#071827;border:1px solid #315f7c;border-radius:8px;padding:8px 10px;font-size:8px;color:#cce1ec;display:none}.measure-box.show{display:block}
 
 .results{background:#071827;border-top:1px solid var(--line);min-height:0}
 .result-tabs{display:flex;border-bottom:1px solid #193b51;height:34px}.result-tab{border:0;background:transparent;color:#7899ad;padding:8px 13px;font-size:8px}.result-tab.active{color:#ffd166;border-bottom:2px solid var(--accent)}
 .result-view{display:none;height:calc(100% - 34px);overflow:auto;padding:11px 13px}.result-view.active{display:block}
 .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.kpi{background:#0a2031;border:1px solid #214860;border-radius:10px;padding:10px}.kpi span{display:block;font-size:7px;color:#7898ab;text-transform:uppercase}.kpi strong{font-size:18px;display:block;margin-top:5px}
 .result-text{font-size:9px;line-height:1.65;color:#c7dae5}
-.chart{height:150px;display:flex;align-items:flex-end;gap:14px;padding:8px 10px 20px}.chart-col{flex:1;text-align:center;font-size:7px;color:#829fb2}.chart-bar{border-radius:6px 6px 0 0;background:linear-gradient(180deg,var(--accent),var(--accent2));min-height:4px;margin-bottom:5px}
-.ai-box{border:1px solid #274e66;border-left:3px solid var(--accent);background:#091e2e;border-radius:10px;padding:10px;font-size:9px;line-height:1.65}.ai-head{display:flex;justify-content:space-between;margin-bottom:7px}.ai-head b{font-size:9px}.ai-head span{color:#7192a6;font-size:7px}
+.chart-wrap{display:grid;grid-template-columns:1.2fr .8fr;gap:12px;height:100%}
+.chart{height:170px;display:flex;align-items:flex-end;gap:14px;padding:8px 10px 20px}.chart-col{flex:1;text-align:center;font-size:7px;color:#829fb2}.chart-bar{border-radius:6px 6px 0 0;background:linear-gradient(180deg,var(--accent),var(--accent2));min-height:4px;margin-bottom:5px}
+.donut-card{display:flex;align-items:center;justify-content:center}.donut{width:130px;height:130px;border-radius:50%;background:conic-gradient(#2563eb 0 25%,#22c55e 25% 50%,#f59e0b 50% 75%,#ef4444 75% 100%);position:relative}.donut:after{content:"";position:absolute;inset:25px;background:#071827;border-radius:50%}.donut-label{position:absolute;z-index:2;text-align:center;font-size:8px;color:#9db7c8}
+.ai-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:10px}.ai-box{border:1px solid #274e66;border-left:3px solid var(--accent);background:#091e2e;border-radius:10px;padding:10px;font-size:9px;line-height:1.65}
+.ai-head{display:flex;justify-content:space-between;margin-bottom:7px}.ai-head b{font-size:9px}.ai-head span{color:#7192a6;font-size:7px}
+.ai-rec{background:#0a2031;border:1px solid #214860;border-radius:10px;padding:10px}.ai-rec h4{margin:0 0 7px;font-size:8px}.ai-rec ul{margin:0;padding-left:16px;font-size:8px;color:#bcd0dc;line-height:1.7}
 
 /* RIGHT */
 .right{background:#061522;border-left:1px solid var(--line);overflow:auto;padding:11px}
 .flow-card{background:#091e2e;border:1px solid #214860;border-radius:11px;padding:10px;margin-bottom:8px;box-shadow:var(--shadow)}
-.flow-title{display:flex;gap:7px;align-items:center;font-size:9px;font-weight:850;margin-bottom:8px}.flow-num{width:22px;height:22px;border-radius:7px;background:#0e3149;display:grid;place-items:center;color:#9cc2d7;font-size:7px}
+.flow-title{display:flex;gap:7px;align-items:center;font-size:9px;font-weight:850;margin-bottom:8px}
+.flow-num{width:22px;height:22px;border-radius:7px;background:#0e3149;display:grid;place-items:center;color:#9cc2d7;font-size:7px}
+.flow-num.done{background:#123b2a;color:#72e4a9}.flow-num.running{background:#4a3510;color:#ffd166}
 .chip{display:flex;justify-content:space-between;gap:10px;border:1px solid #214960;border-radius:8px;background:#061522;padding:8px;margin-bottom:5px;font-size:8px}.chip em{font-style:normal;color:var(--ok)}
 .param label{display:block;color:#7f9fb2;font-size:8px;margin:8px 0}.param select,.param input[type=number]{width:100%;margin-top:5px;border:1px solid #315f7c;background:#061522;color:#fff;border-radius:8px;padding:8px;font-size:9px}.param input[type=range]{width:100%;margin-top:6px}
 .progress{height:6px;border:1px solid #1f455d;background:#061522;border-radius:999px;overflow:hidden}.progress > div{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .22s}
-.proc-status{font-size:8px;color:#a7bfce;margin:7px 0}.proc-log{font-size:7px;line-height:1.5;color:#62869d;max-height:88px;overflow:auto;margin-bottom:8px}.proc-log .done{color:var(--ok)}
+.proc-status{font-size:8px;color:#a7bfce;margin:7px 0}.proc-log{font-size:7px;line-height:1.55;color:#62869d;max-height:105px;overflow:auto;margin-bottom:8px}.proc-log .done{color:var(--ok)}
 .run{width:100%;border:0;border-radius:9px;padding:10px;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#111;font-weight:950;font-size:9px}
 .actions{display:grid;grid-template-columns:1fr 1fr;gap:6px}.actions button{padding:8px 5px;border-radius:7px;border:1px solid #294f68;background:#0b2940;color:#cfe3ef;font-size:7px}.actions button:disabled{opacity:.35;cursor:not-allowed}
 .legend{display:flex;align-items:center;gap:7px;font-size:8px;color:#a0bbcb;margin:6px 0}.legend i{width:10px;height:10px;border-radius:3px}.c1{background:#2563eb}.c2{background:#22c55e}.c3{background:#f59e0b}.c4{background:#ef4444}
 
-/* MODALS/TOAST */
-#toast{position:fixed;right:380px;top:82px;z-index:3000;background:#0e2a3f;border:1px solid #366681;color:#e9f7ff;border-radius:8px;padding:9px 12px;font-size:8px;opacity:0;transform:translateY(-8px);transition:.2s;pointer-events:none}#toast.show{opacity:1;transform:translateY(0)}
-.modal-back{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:4000;place-items:center}.modal-back.show{display:grid}.modal{width:min(620px,92vw);max-height:75vh;overflow:auto;background:#081c2b;border:1px solid #315e79;border-radius:14px;padding:14px}.modal h3{font-size:12px;margin:0 0 10px}.modal p,.modal li{font-size:9px;line-height:1.6;color:#b9cfdb}.modal button{float:right;border:1px solid #315e79;background:#0d2b40;color:#e3f2fa;border-radius:8px;padding:7px 10px;font-size:8px}
+/* MODAL */
+#toast{position:fixed;right:385px;top:82px;z-index:3000;background:#0e2a3f;border:1px solid #366681;color:#e9f7ff;border-radius:8px;padding:9px 12px;font-size:8px;opacity:0;transform:translateY(-8px);transition:.2s;pointer-events:none}#toast.show{opacity:1;transform:translateY(0)}
+.modal-back{display:none;position:fixed;inset:0;background:rgba(0,0,0,.58);z-index:4000;place-items:center}.modal-back.show{display:grid}
+.modal{width:min(680px,92vw);max-height:78vh;overflow:auto;background:#081c2b;border:1px solid #315e79;border-radius:14px;padding:15px}.modal h3{font-size:12px;margin:0 0 10px}.modal p,.modal li,.modal td{font-size:9px;line-height:1.6;color:#b9cfdb}.modal table{width:100%;border-collapse:collapse;margin:10px 0}.modal td{border-bottom:1px solid #1f435a;padding:7px}.modal button{float:right;border:1px solid #315e79;background:#0d2b40;color:#e3f2fa;border-radius:8px;padding:7px 10px;font-size:8px}
 .leaflet-control-attribution{font-size:7px!important}
 
-/* Responsive */
-@media(max-width:1260px){#app{grid-template-columns:240px minmax(540px,1fr) 310px}}
+@media(max-width:1260px){#app{grid-template-columns:245px minmax(560px,1fr) 315px}}
 @media(max-width:980px){
  html,body{overflow:auto}
  #app{grid-template-columns:1fr;height:auto}
- .left,.right{height:auto}
- .center{min-height:950px}
- #toast{right:15px}
+ .left,.right{height:auto}.center{min-height:980px}#toast{right:15px}
+}
+@media print{
+ .left,.right,.top-actions,.map-tools,.result-tabs,#toast{display:none!important}
+ #app{display:block}.center{display:block}.topbar{border:0}.map-wrap{height:55vh}.results{height:auto}
 }
 </style>
 </head>
 <body>
 <div id="app">
-  <aside class="left">
-    <div class="brand">
-      <div class="brandmark">SUO</div>
-      <div><h1>Spatial Analytics Engine</h1><p>Selangor Urban Observatory · Enterprise v3.0</p></div>
+<aside class="left">
+  <div class="brand"><div class="brandmark">SUO</div><div><h1>Spatial Analytics Engine</h1><p>Selangor Urban Observatory · Enterprise Final v4.0</p></div></div>
+  <div class="left-tabs">
+    <button class="left-tab active" data-left="library">Analysis Library</button>
+    <button class="left-tab" data-left="data">Data Manager</button>
+    <button class="left-tab" data-left="history">History</button>
+  </div>
+
+  <div id="left-library" class="left-body active">
+    <input id="analysisSearch" class="search" placeholder="Search analysis..."/>
+    <div class="group"><div class="group-title">DEMOGRAPHY</div>
+      <button class="tool active" data-analysis="population-density"><span class="tool-icon">PD</span><span><b>Population Density</b><small>Grid concentration analysis</small></span><span class="info-btn" data-info="population-density">ⓘ</span></button>
+      <button class="tool disabled"><span class="tool-icon">PG</span><span><b>Population Growth</b><small>Planned module</small></span></button>
+      <button class="tool disabled"><span class="tool-icon">PP</span><span><b>Population Projection</b><small>Planned module</small></span></button>
     </div>
-
-    <div class="left-tabs">
-      <button class="left-tab active" data-left="library">Analysis Library</button>
-      <button class="left-tab" data-left="data">Data Manager</button>
-      <button class="left-tab" data-left="history">History</button>
+    <div class="group"><div class="group-title">ACCESSIBILITY</div>
+      <button class="tool" data-analysis="facility-accessibility"><span class="tool-icon">FA</span><span><b>Facility Accessibility</b><small>Service coverage analysis</small></span><span class="info-btn" data-info="facility-accessibility">ⓘ</span></button>
+      <button class="tool disabled"><span class="tool-icon">PT</span><span><b>Public Transport Access</b><small>Planned module</small></span></button>
+      <button class="tool disabled"><span class="tool-icon">OS</span><span><b>Open Space Access</b><small>Planned module</small></span></button>
     </div>
-
-    <div id="left-library" class="left-body active">
-      <input id="analysisSearch" class="search" placeholder="Search analysis..."/>
-
-      <div class="group"><div class="group-title">DEMOGRAPHY</div>
-        <button class="tool active" data-analysis="population-density"><span class="tool-icon">PD</span><span><b>Population Density</b><small>Grid concentration analysis</small></span></button>
-        <button class="tool disabled"><span class="tool-icon">PG</span><span><b>Population Growth</b><small>Planned module</small></span></button>
-        <button class="tool disabled"><span class="tool-icon">PP</span><span><b>Population Projection</b><small>Planned module</small></span></button>
-      </div>
-
-      <div class="group"><div class="group-title">ACCESSIBILITY</div>
-        <button class="tool" data-analysis="facility-accessibility"><span class="tool-icon">FA</span><span><b>Facility Accessibility</b><small>Service coverage analysis</small></span></button>
-        <button class="tool disabled"><span class="tool-icon">PT</span><span><b>Public Transport Access</b><small>Planned module</small></span></button>
-        <button class="tool disabled"><span class="tool-icon">OS</span><span><b>Open Space Access</b><small>Planned module</small></span></button>
-      </div>
-
-      <div class="group"><div class="group-title">URBAN</div>
-        <button class="tool" data-analysis="urban-service-gap"><span class="tool-icon">UG</span><span><b>Urban Service Gap</b><small>Population vs service gap</small></span></button>
-        <button class="tool disabled"><span class="tool-icon">DP</span><span><b>Development Pressure</b><small>Planned module</small></span></button>
-        <button class="tool disabled"><span class="tool-icon">UC</span><span><b>Urban Change</b><small>Planned module</small></span></button>
-      </div>
-
-      <div class="group"><div class="group-title">PLANNING</div>
-        <button class="tool disabled"><span class="tool-icon">SS</span><span><b>Site Suitability</b><small>Next development</small></span></button>
-        <button class="tool disabled"><span class="tool-icon">TD</span><span><b>TOD Potential</b><small>Next development</small></span></button>
-        <button class="tool disabled"><span class="tool-icon">DC</span><span><b>Development Constraint</b><small>Next development</small></span></button>
-      </div>
-
-      <div class="group"><div class="group-title">ENVIRONMENT</div>
-        <button class="tool disabled"><span class="tool-icon">FL</span><span><b>Flood Exposure</b><small>Planned module</small></span></button>
-        <button class="tool disabled"><span class="tool-icon">KS</span><span><b>KSAS Conflict</b><small>Planned module</small></span></button>
-      </div>
+    <div class="group"><div class="group-title">URBAN</div>
+      <button class="tool" data-analysis="urban-service-gap"><span class="tool-icon">UG</span><span><b>Urban Service Gap</b><small>Population vs service gap</small></span><span class="info-btn" data-info="urban-service-gap">ⓘ</span></button>
+      <button class="tool disabled"><span class="tool-icon">DP</span><span><b>Development Pressure</b><small>Planned module</small></span></button>
+      <button class="tool disabled"><span class="tool-icon">UC</span><span><b>Urban Change</b><small>Planned module</small></span></button>
     </div>
-
-    <div id="left-data" class="left-body">
-      <div class="mini-card"><h4>Registered Layers</h4><div id="layerList"></div></div>
-      <label class="upload">+ Import GeoJSON<input id="fileInput" type="file" accept=".geojson,.json" hidden/></label>
-      <div class="mini-card"><h4>Enterprise Data Sources</h4>
-        <div class="data-row"><span>Population Demo</span><em class="ok">Ready</em></div>
-        <div class="data-row"><span>Facility Demo</span><em class="ok">Ready</em></div>
-        <div class="data-row"><span>DOSM Population</span><em>Not linked</em></div>
-        <div class="data-row"><span>PBT Boundary</span><em>Not linked</em></div>
-        <div class="data-row"><span>SUO Data Hub API</span><em>Not linked</em></div>
-      </div>
+    <div class="group"><div class="group-title">PLANNING</div>
+      <button class="tool disabled"><span class="tool-icon">SS</span><span><b>Site Suitability</b><small>Next development</small></span></button>
+      <button class="tool disabled"><span class="tool-icon">TD</span><span><b>TOD Potential</b><small>Next development</small></span></button>
+      <button class="tool disabled"><span class="tool-icon">DC</span><span><b>Development Constraint</b><small>Next development</small></span></button>
     </div>
-
-    <div id="left-history" class="left-body">
-      <div class="mini-card"><h4>Analysis Jobs</h4><div id="historyList"></div></div>
-      <button id="clearHistory" style="width:100%;padding:8px;border-radius:8px;border:1px solid #294f68;background:#091e2e;color:#cfe3ef;font-size:8px">Clear History</button>
+    <div class="group"><div class="group-title">ENVIRONMENT</div>
+      <button class="tool disabled"><span class="tool-icon">FL</span><span><b>Flood Exposure</b><small>Planned module</small></span></button>
+      <button class="tool disabled"><span class="tool-icon">KS</span><span><b>KSAS Conflict</b><small>Planned module</small></span></button>
     </div>
+  </div>
 
-    <div class="left-foot">
-      <button id="resetWorkspace">Reset Workspace</button>
-      Core Engine · Data · Analysis · Workflow · Results · History · Export
+  <div id="left-data" class="left-body">
+    <div class="mini-card"><h4>Registered Layers</h4><div id="layerList"></div></div>
+    <label class="upload">+ Import GeoJSON<input id="fileInput" type="file" accept=".geojson,.json" hidden/></label>
+    <div class="mini-card"><h4>Enterprise Data Sources</h4>
+      <div class="data-row"><span>Population Demo</span><em class="ok">Ready</em></div>
+      <div class="data-row"><span>Facility Demo</span><em class="ok">Ready</em></div>
+      <div class="data-row"><span>DOSM Population</span><em>Not linked</em></div>
+      <div class="data-row"><span>PBT Boundary</span><em>Not linked</em></div>
+      <div class="data-row"><span>SUO Data Hub API</span><em>Not linked</em></div>
     </div>
-  </aside>
+  </div>
 
-  <main class="center">
-    <header class="topbar">
-      <div><h2 id="title">Population Density</h2><p id="subtitle">Analyse population concentration using spatial grid units.</p></div>
-      <div class="top-actions">
-        <span class="engine"><i></i> Engine Ready</span>
-        <button id="aboutBtn">Engine Architecture</button>
-        <button id="openGeoportal">Open 3D GeoPortal</button>
-      </div>
-    </header>
+  <div id="left-history" class="left-body">
+    <div class="mini-card"><h4>Analysis Jobs</h4><div id="historyList"></div></div>
+    <button id="clearHistory" style="width:100%;padding:8px;border-radius:8px;border:1px solid #294f68;background:#091e2e;color:#cfe3ef;font-size:8px">Clear History</button>
+  </div>
 
-    <section class="map-wrap">
-      <div id="map"></div>
-      <div class="map-tools">
-        <button id="homeBtn">⌂</button>
-        <button id="populationToggle" class="active">POP</button>
-        <button id="resultToggle" class="active">RES</button>
-      </div>
-      <div class="map-badge"><span>SUO SPATIAL ANALYTICS ENGINE</span><span id="mapState">Workspace Ready</span></div>
-      <div id="coord" class="coord">101.5300, 3.1800</div>
-    </section>
+  <div class="left-foot"><button id="resetWorkspace">Reset Workspace</button>Core Engine · Data · Analysis · Workflow · Results · History · Export</div>
+</aside>
 
-    <section class="results">
-      <div class="result-tabs">
-        <button class="result-tab active" data-result="summary">Summary</button>
-        <button class="result-tab" data-result="statistics">Statistics</button>
-        <button class="result-tab" data-result="chart">Chart</button>
-        <button class="result-tab" data-result="ai">AI Insight</button>
-        <button class="result-tab" data-result="metadata">Metadata</button>
-      </div>
-      <div id="result-summary" class="result-view active">
-        <div class="kpis">
-          <div class="kpi"><span>Population</span><strong id="kpiPopulation">—</strong></div>
-          <div class="kpi"><span>Coverage</span><strong id="kpiCoverage">—</strong></div>
-          <div class="kpi"><span>Critical Areas</span><strong id="kpiCritical">—</strong></div>
-          <div class="kpi"><span>Analysis Units</span><strong id="kpiUnits">—</strong></div>
-          <div class="kpi"><span>Execution</span><strong id="kpiExecution">—</strong></div>
-        </div>
-      </div>
-      <div id="result-statistics" class="result-view"><div id="statistics" class="result-text">Run an analysis to calculate statistics.</div></div>
-      <div id="result-chart" class="result-view"><div id="chart" class="chart"></div></div>
-      <div id="result-ai" class="result-view"><div class="ai-box"><div class="ai-head"><b>Urban Planning AI</b><span>Decision Support</span></div><div id="aiInsight">Run an analysis to generate spatial interpretation.</div></div></div>
-      <div id="result-metadata" class="result-view"><div id="metadata" class="result-text">No analysis metadata yet.</div></div>
-    </section>
-  </main>
-
-  <aside class="right">
-    <div class="flow-card"><div class="flow-title"><span class="flow-num">01</span>Input Data</div><div id="inputPanel"></div></div>
-    <div class="flow-card"><div class="flow-title"><span class="flow-num">02</span>Parameters</div><div id="parameterPanel" class="param"></div></div>
-    <div class="flow-card">
-      <div class="flow-title"><span class="flow-num">03</span>Processing</div>
-      <div class="progress"><div id="progressBar"></div></div>
-      <div id="processStatus" class="proc-status">Ready to run.</div>
-      <div id="processLog" class="proc-log"></div>
-      <button id="runBtn" class="run">Run Analysis</button>
+<main class="center">
+  <header class="topbar">
+    <div><h2 id="title">Population Density</h2><p id="subtitle">Analyse population concentration using spatial grid units.</p></div>
+    <div class="top-actions">
+      <span class="engine"><i></i> Engine Ready</span>
+      <button id="architectureBtn">Engine Architecture</button>
+      <button id="printBtn">Print</button>
+      <button id="openGeoportal">Open 3D GeoPortal</button>
     </div>
-    <div class="flow-card">
-      <div class="flow-title"><span class="flow-num">04</span>Result Actions</div>
-      <div class="actions">
-        <button id="exportGeoJSON" disabled>Export GeoJSON</button>
-        <button id="exportReport" disabled>Export Report</button>
-        <button id="send3D" disabled>View in 3D GeoPortal</button>
-        <button id="clearResult">Clear Result</button>
+  </header>
+
+  <section class="map-wrap" id="mapWrap">
+    <div id="map"></div>
+    <div class="map-tools">
+      <button id="homeBtn">⌂</button>
+      <button id="populationToggle" class="active">POP</button>
+      <button id="resultToggle" class="active">RES</button>
+      <button id="basemapBtn">BASE</button>
+      <button id="locateBtn">LOC</button>
+      <button id="measureBtn">MEA</button>
+      <button id="fullscreenBtn">FULL</button>
+    </div>
+    <div id="measureBox" class="measure-box">Measure mode: click two points on map.</div>
+    <div class="map-badge"><span>SUO SPATIAL ANALYTICS ENGINE</span><span id="mapState">Workspace Ready</span></div>
+    <div id="coord" class="coord">101.5300, 3.1800</div>
+  </section>
+
+  <section class="results">
+    <div class="result-tabs">
+      <button class="result-tab active" data-result="summary">Summary</button>
+      <button class="result-tab" data-result="statistics">Statistics</button>
+      <button class="result-tab" data-result="chart">Charts</button>
+      <button class="result-tab" data-result="ai">AI Insight</button>
+      <button class="result-tab" data-result="metadata">Metadata</button>
+    </div>
+    <div id="result-summary" class="result-view active">
+      <div class="kpis">
+        <div class="kpi"><span>Population</span><strong id="kpiPopulation">—</strong></div>
+        <div class="kpi"><span>Coverage</span><strong id="kpiCoverage">—</strong></div>
+        <div class="kpi"><span>Critical Areas</span><strong id="kpiCritical">—</strong></div>
+        <div class="kpi"><span>Analysis Units</span><strong id="kpiUnits">—</strong></div>
+        <div class="kpi"><span>Execution</span><strong id="kpiExecution">—</strong></div>
       </div>
     </div>
-    <div class="flow-card">
-      <div class="flow-title"><span class="flow-num">05</span>Legend</div>
-      <div class="legend"><i class="c1"></i>Low</div>
-      <div class="legend"><i class="c2"></i>Moderate</div>
-      <div class="legend"><i class="c3"></i>High</div>
-      <div class="legend"><i class="c4"></i>Critical</div>
+    <div id="result-statistics" class="result-view"><div id="statistics" class="result-text">Run an analysis to calculate statistics.</div></div>
+    <div id="result-chart" class="result-view">
+      <div class="chart-wrap">
+        <div id="chart" class="chart"></div>
+        <div class="donut-card"><div id="donut" class="donut"><div id="donutLabel" class="donut-label">No result</div></div></div>
+      </div>
     </div>
-  </aside>
+    <div id="result-ai" class="result-view">
+      <div class="ai-grid">
+        <div class="ai-box"><div class="ai-head"><b>Urban Planning AI</b><span>Decision Support</span></div><div id="aiInsight">Run an analysis to generate spatial interpretation.</div></div>
+        <div class="ai-rec"><h4>Recommended Actions</h4><ul id="aiActions"><li>No recommendations yet.</li></ul></div>
+      </div>
+    </div>
+    <div id="result-metadata" class="result-view"><div id="metadata" class="result-text">No analysis metadata yet.</div></div>
+  </section>
+</main>
+
+<aside class="right">
+  <div class="flow-card"><div class="flow-title"><span id="step1" class="flow-num">01</span>Input Data</div><div id="inputPanel"></div></div>
+  <div class="flow-card"><div class="flow-title"><span id="step2" class="flow-num">02</span>Parameters</div><div id="parameterPanel" class="param"></div></div>
+  <div class="flow-card">
+    <div class="flow-title"><span id="step3" class="flow-num">03</span>Processing</div>
+    <div class="progress"><div id="progressBar"></div></div>
+    <div id="processStatus" class="proc-status">Ready to run.</div>
+    <div id="processLog" class="proc-log"></div>
+    <button id="runBtn" class="run">Run Analysis</button>
+  </div>
+  <div class="flow-card">
+    <div class="flow-title"><span id="step4" class="flow-num">04</span>Result Actions</div>
+    <div class="actions">
+      <button id="exportGeoJSON" disabled>Export GeoJSON</button>
+      <button id="exportReport" disabled>Export Report</button>
+      <button id="send3D" disabled>View in 3D GeoPortal</button>
+      <button id="clearResult">Clear Result</button>
+    </div>
+  </div>
+  <div class="flow-card">
+    <div class="flow-title"><span id="step5" class="flow-num">05</span>Legend</div>
+    <div class="legend"><i class="c1"></i>Low</div>
+    <div class="legend"><i class="c2"></i>Moderate</div>
+    <div class="legend"><i class="c3"></i>High</div>
+    <div class="legend"><i class="c4"></i>Critical</div>
+  </div>
+</aside>
 </div>
 
 <div id="toast"></div>
-<div id="modalBack" class="modal-back"><div class="modal"><button id="modalClose">Close</button><h3>SUO Spatial Analytics Engine v3.0</h3>
-<p>This version is structured as an enterprise analytics workspace:</p>
-<ul>
-<li><b>Data Manager</b> — registers and imports analytical layers.</li>
-<li><b>Analysis Manager</b> — selects and executes analysis models.</li>
-<li><b>Workflow Manager</b> — validates, processes and reports job progress.</li>
-<li><b>Result Manager</b> — renders spatial outputs, KPIs, statistics and charts.</li>
-<li><b>History Manager</b> — stores recent analysis jobs locally.</li>
-<li><b>Export Manager</b> — exports GeoJSON and analysis reports.</li>
-<li><b>GeoPortal Handoff</b> — prepared for future connection to the SUO 3D GeoPortal.</li>
-</ul>
-<p>Phase 1 currently uses synthetic population and facility data for engine validation. Replace these with verified DOSM/SUO datasets before production.</p>
-</div></div>
+
+<div id="modalBack" class="modal-back">
+  <div class="modal">
+    <button id="modalClose">Close</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@turf/turf@7/turf.min.js"></script>
 <script>
 (() => {
 "use strict";
-
-/* ==========================================================
-   CONFIG
-========================================================== */
-const CONFIG={
-  version:"3.0",
-  bbox:[100.95,2.62,101.95,3.83],
-  home:[3.18,101.53],
-  zoom:8,
-  geoportalUrl:""
-};
+const CONFIG={version:"4.0 FINAL",bbox:[100.95,2.62,101.95,3.83],home:[3.18,101.53],zoom:8,geoportalUrl:""};
 const COLORS={1:"#2563eb",2:"#22c55e",3:"#f59e0b",4:"#ef4444"};
+const $=id=>document.getElementById(id), sleep=ms=>new Promise(r=>setTimeout(r,ms)), rnd=(a,b)=>a+Math.random()*(b-a);
 
-/* ==========================================================
-   UTILITIES
-========================================================== */
-const $=id=>document.getElementById(id);
-const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-const rnd=(a,b)=>a+Math.random()*(b-a);
-function compact(n){
-  if(n>=1e6)return(n/1e6).toFixed(2)+"M";
-  if(n>=1e3)return(n/1e3).toFixed(0)+"K";
-  return Math.round(n||0).toLocaleString();
-}
-function toast(msg){
-  const t=$("toast"); t.textContent=msg; t.classList.add("show");
-  setTimeout(()=>t.classList.remove("show"),1700);
-}
-function download(filename, text, type){
-  const blob=new Blob([text],{type:type||"text/plain"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob); a.download=filename; a.click();
-  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
-}
-function quantileClass(values,v){
-  const a=[...values].sort((x,y)=>x-y);
-  const q=p=>a[Math.min(a.length-1,Math.floor((a.length-1)*p))]||0;
-  if(v<=q(.25))return 1;if(v<=q(.5))return 2;if(v<=q(.75))return 3;return 4;
-}
-function buildGrid(population, km){
-  const grid=turf.squareGrid(CONFIG.bbox,km,{units:"kilometers"});
-  grid.features.forEach((cell,i)=>{
-    let pop=0;
-    population.features.forEach(pt=>{
-      if(turf.booleanPointInPolygon(pt,cell))pop+=Number(pt.properties.population||0);
-    });
-    cell.properties={id:i+1,population:pop};
-  });
-  return grid;
-}
-function unionBuffers(features,km){
-  let merged=null;
-  features.forEach(f=>{
-    const b=turf.buffer(f,km,{units:"kilometers"});
-    if(!merged)merged=b;
-    else{try{merged=turf.union(turf.featureCollection([merged,b]))}catch(e){}}
-  });
-  return merged;
-}
+function compact(n){if(n>=1e6)return(n/1e6).toFixed(2)+"M";if(n>=1e3)return(n/1e3).toFixed(0)+"K";return Math.round(n||0).toLocaleString()}
+function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1700)}
+function download(filename,text,type){const blob=new Blob([text],{type:type||"text/plain"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function quantileClass(values,v){const a=[...values].sort((x,y)=>x-y),q=p=>a[Math.min(a.length-1,Math.floor((a.length-1)*p))]||0;if(v<=q(.25))return 1;if(v<=q(.5))return 2;if(v<=q(.75))return 3;return 4}
+function buildGrid(population,km){const grid=turf.squareGrid(CONFIG.bbox,km,{units:"kilometers"});grid.features.forEach((cell,i)=>{let pop=0;population.features.forEach(pt=>{if(turf.booleanPointInPolygon(pt,cell))pop+=Number(pt.properties.population||0)});cell.properties={id:i+1,population:pop}});return grid}
+function unionBuffers(features,km){let merged=null;features.forEach(f=>{const b=turf.buffer(f,km,{units:"kilometers"});if(!merged)merged=b;else{try{merged=turf.union(turf.featureCollection([merged,b]))}catch(e){}}});return merged}
 
-/* ==========================================================
-   CORE ENGINE: DATA MANAGER
-========================================================== */
-class DataManager{
-  constructor(){this.layers=new Map()}
-  register(id,meta){this.layers.set(id,meta)}
-  get(id){return this.layers.get(id)}
-  list(){return [...this.layers.entries()].map(([id,m])=>({id,...m}))}
-  import(id,name,geojson){this.register(id,{name,type:"Imported GeoJSON",status:"Ready",geojson})}
-}
+/* Data Manager */
+class DataManager{constructor(){this.layers=new Map()}register(id,meta){this.layers.set(id,meta)}get(id){return this.layers.get(id)}list(){return [...this.layers.entries()].map(([id,m])=>({id,...m}))}import(id,name,geojson){this.register(id,{name,type:"Imported GeoJSON",status:"Ready",geojson})}}
 const dataManager=new DataManager();
 
-/* Synthetic Phase 1 datasets */
-const population=turf.featureCollection(Array.from({length:260},(_,i)=>{
-  const urban=Math.random()<.76;
-  const lon=urban?rnd(101.17,101.77):rnd(CONFIG.bbox[0],CONFIG.bbox[2]);
-  const lat=urban?rnd(2.85,3.43):rnd(CONFIG.bbox[1],CONFIG.bbox[3]);
-  return turf.point([lon,lat],{id:i+1,population:Math.round(rnd(500,18000))});
-}));
+const population=turf.featureCollection(Array.from({length:280},(_,i)=>{const urban=Math.random()<.77,lon=urban?rnd(101.16,101.78):rnd(CONFIG.bbox[0],CONFIG.bbox[2]),lat=urban?rnd(2.84,3.45):rnd(CONFIG.bbox[1],CONFIG.bbox[3]);return turf.point([lon,lat],{id:i+1,population:Math.round(rnd(500,18000))})}));
 const types=["hospital","school","police"];
-const facilities=turf.featureCollection(Array.from({length:78},(_,i)=>{
-  const type=types[i%types.length];
-  return turf.point([rnd(101.03,101.84),rnd(2.70,3.60)],{type,name:type.toUpperCase()+" "+(i+1)});
-}));
+const facilities=turf.featureCollection(Array.from({length:81},(_,i)=>{const type=types[i%types.length];return turf.point([rnd(101.03,101.84),rnd(2.70,3.60)],{type,name:type.toUpperCase()+" "+(i+1)})}));
 dataManager.register("population",{name:"Population Demo",type:"Point GeoJSON",status:"Ready",geojson:population});
 dataManager.register("facilities",{name:"Facilities Demo",type:"Point GeoJSON",status:"Ready",geojson:facilities});
 
-/* ==========================================================
-   CORE ENGINE: HISTORY MANAGER
-========================================================== */
-class HistoryManager{
-  constructor(key){this.key=key;this.items=this.load()}
-  load(){try{return JSON.parse(localStorage.getItem(this.key))||[]}catch(e){return[]}}
-  save(){localStorage.setItem(this.key,JSON.stringify(this.items.slice(0,30)))}
-  add(item){this.items.unshift(item);this.items=this.items.slice(0,30);this.save()}
-  clear(){this.items=[];this.save()}
-}
-const historyManager=new HistoryManager("suoSpatialV3History");
+/* History */
+class HistoryManager{constructor(key){this.key=key;this.items=this.load()}load(){try{return JSON.parse(localStorage.getItem(this.key))||[]}catch(e){return[]}}save(){localStorage.setItem(this.key,JSON.stringify(this.items.slice(0,30)))}add(item){this.items.unshift(item);this.items=this.items.slice(0,30);this.save()}clear(){this.items=[];this.save()}}
+const historyManager=new HistoryManager("suoSpatialV4History");
 
-/* ==========================================================
-   ANALYSIS MODULES
-========================================================== */
+/* Modules */
 const modules={
  "population-density":{
-   label:"Population Density",
-   subtitle:"Analyse population concentration using spatial grid units.",
+   label:"Population Density",subtitle:"Analyse population concentration using spatial grid units.",
+   info:{purpose:"Identify concentration of population using configurable spatial grid units.",input:"Population point/grid data",output:"Density grid with Low–Critical classes",method:"Spatial aggregation + quartile classification",planning:"Infrastructure capacity, facility demand, development pressure"},
    inputs:()=>`<div class="chip"><span>Population Layer</span><em>Population Demo</em></div><div class="chip"><span>Study Area</span><em>Selangor Extent</em></div>`,
    params:()=>`<label>Grid Size<select id="pGrid"><option value="2">2 km</option><option value="5" selected>5 km</option><option value="10">10 km</option></select></label><label>Classification<select><option>Quartile</option></select></label>`,
    async run(){
-     const start=performance.now(),km=Number($("pGrid").value),pop=dataManager.get("population").geojson;
-     const grid=buildGrid(pop,km),vals=grid.features.map(f=>f.properties.population);
-     grid.features.forEach(f=>f.properties.class=quantileClass(vals,f.properties.population));
-     const total=vals.reduce((a,b)=>a+b,0),critical=grid.features.filter(f=>f.properties.class===4&&f.properties.population>0).length;
-     const populated=vals.filter(v=>v>0),max=Math.max(...vals,0),mean=populated.length?populated.reduce((a,b)=>a+b,0)/populated.length:0;
-     return resultBase(this,grid,total,null,critical,performance.now()-start,
-       {"Grid Size":km+" km","Highest Grid Population":Math.round(max).toLocaleString(),"Average Populated Grid":Math.round(mean).toLocaleString(),"Populated Units":populated.length.toLocaleString()},
-       `The analysis identifies ${critical} grid units in the highest population-density class. These locations should be prioritised for infrastructure-capacity review, facility-demand assessment and development-pressure monitoring. The maximum grid population is approximately ${Math.round(max).toLocaleString()} persons.`,
-       "Square grid aggregation + quartile classification");
+    const start=performance.now(),km=Number($("pGrid").value),pop=dataManager.get("population").geojson,grid=buildGrid(pop,km),vals=grid.features.map(f=>f.properties.population);
+    grid.features.forEach(f=>f.properties.class=quantileClass(vals,f.properties.population));
+    const total=vals.reduce((a,b)=>a+b,0),critical=grid.features.filter(f=>f.properties.class===4&&f.properties.population>0).length,populated=vals.filter(v=>v>0),max=Math.max(...vals,0),mean=populated.length?populated.reduce((a,b)=>a+b,0)/populated.length:0;
+    return resultBase(this,grid,total,null,critical,performance.now()-start,{"Grid Size":km+" km","Highest Grid Population":Math.round(max).toLocaleString(),"Average Populated Grid":Math.round(mean).toLocaleString(),"Populated Units":populated.length.toLocaleString()},`The analysis identifies ${critical} grid units in the highest population-density class. These areas should be prioritised for infrastructure-capacity review, facility-demand assessment and development-pressure monitoring.`,["Review infrastructure capacity in highest-density cells","Compare with school, hospital and open-space provision","Use PBT boundaries for policy-level reporting"],"Square grid aggregation + quartile classification");
    }
  },
  "facility-accessibility":{
-   label:"Facility Accessibility",
-   subtitle:"Measure population coverage around essential urban facilities.",
+   label:"Facility Accessibility",subtitle:"Measure population coverage around essential urban facilities.",
+   info:{purpose:"Measure service coverage of facilities around population locations.",input:"Population + facility point layers",output:"Covered / underserved spatial units",method:"Euclidean buffer + population overlay",planning:"Facility planning and service-gap identification"},
    inputs:()=>`<div class="chip"><span>Population Layer</span><em>Population Demo</em></div><div class="chip"><span>Facility Layer</span><em>Facilities Demo</em></div>`,
    params:()=>`<label>Facility Type<select id="pFacility"><option value="hospital">Hospital</option><option value="school">School</option><option value="police">Police</option></select></label><label>Coverage Distance<select id="pDistance"><option value="1">1 km</option><option value="3" selected>3 km</option><option value="5">5 km</option><option value="10">10 km</option></select></label>`,
    async run(){
-     const start=performance.now(),pop=dataManager.get("population").geojson,all=dataManager.get("facilities").geojson;
-     const type=$("pFacility").value,km=Number($("pDistance").value),facs=all.features.filter(f=>f.properties.type===type),merged=unionBuffers(facs,km);
-     let total=0,served=0;
-     pop.features.forEach(p=>{const v=Number(p.properties.population||0);total+=v;if(merged&&turf.booleanPointInPolygon(p,merged))served+=v});
-     const coverage=total?served/total*100:0,grid=buildGrid(pop,5);
-     grid.features.forEach(cell=>{const covered=merged&&turf.booleanPointInPolygon(turf.centroid(cell),merged);cell.properties.covered=covered?1:0;cell.properties.class=covered?2:(cell.properties.population>0?4:1)});
-     const critical=grid.features.filter(f=>f.properties.class===4).length;
-     const r=resultBase(this,grid,total,coverage,critical,performance.now()-start,
-       {"Facility Type":type,"Coverage Distance":km+" km","Population Served":Math.round(served).toLocaleString(),"Population Outside Coverage":Math.round(total-served).toLocaleString(),"Facility Count":facs.length},
-       `Approximately ${coverage.toFixed(1)}% of the analysed population is within ${km} km of a ${type}. ${critical} populated grid units remain outside this service coverage and should be reviewed against settlement hierarchy, development intensity and planned facility provision.`,
-       "Euclidean facility buffer + population overlay");
-     r.facilities=turf.featureCollection(facs);r.buffer=merged;return r;
+    const start=performance.now(),pop=dataManager.get("population").geojson,all=dataManager.get("facilities").geojson,type=$("pFacility").value,km=Number($("pDistance").value),facs=all.features.filter(f=>f.properties.type===type),merged=unionBuffers(facs,km);
+    let total=0,served=0;pop.features.forEach(p=>{const v=Number(p.properties.population||0);total+=v;if(merged&&turf.booleanPointInPolygon(p,merged))served+=v});
+    const coverage=total?served/total*100:0,grid=buildGrid(pop,5);grid.features.forEach(cell=>{const covered=merged&&turf.booleanPointInPolygon(turf.centroid(cell),merged);cell.properties.covered=covered?1:0;cell.properties.class=covered?2:(cell.properties.population>0?4:1)});
+    const critical=grid.features.filter(f=>f.properties.class===4).length,r=resultBase(this,grid,total,coverage,critical,performance.now()-start,{"Facility Type":type,"Coverage Distance":km+" km","Population Served":Math.round(served).toLocaleString(),"Population Outside Coverage":Math.round(total-served).toLocaleString(),"Facility Count":facs.length},`Approximately ${coverage.toFixed(1)}% of the analysed population is within ${km} km of a ${type}. ${critical} populated grid units remain outside the defined service coverage.`,["Review underserved populated cells","Compare accessibility with settlement hierarchy","Prioritise detailed network-based travel-time analysis"],"Euclidean facility buffer + population overlay");r.facilities=turf.featureCollection(facs);r.buffer=merged;return r;
    }
  },
  "urban-service-gap":{
-   label:"Urban Service Gap",
-   subtitle:"Identify high-population areas with inadequate facility access.",
+   label:"Urban Service Gap",subtitle:"Identify high-population areas with inadequate facility access.",
+   info:{purpose:"Combine population pressure and facility-access deficiency into one priority index.",input:"Population + service coverage",output:"Composite Urban Service Gap classes",method:"Weighted composite index",planning:"Priority investment and service planning"},
    inputs:()=>`<div class="chip"><span>Population Layer</span><em>Population Demo</em></div><div class="chip"><span>Reference Service</span><em>Hospital Demo</em></div>`,
    params:()=>`<label>Population Weight<input id="pPW" type="range" min="0" max="100" value="60"><div style="text-align:right"><span id="pwLabel">60</span>%</div></label><label>Accessibility Weight<input id="pAW" type="range" min="0" max="100" value="40"><div style="text-align:right"><span id="awLabel">40</span>%</div></label><label>Hospital Coverage<select id="pGapDistance"><option value="3">3 km</option><option value="5" selected>5 km</option><option value="10">10 km</option></select></label>`,
-   bind(){
-     $("pPW").oninput=()=>$("pwLabel").textContent=$("pPW").value;
-     $("pAW").oninput=()=>$("awLabel").textContent=$("pAW").value;
-   },
+   bind(){ $("pPW").oninput=()=>$("pwLabel").textContent=$("pPW").value;$("pAW").oninput=()=>$("awLabel").textContent=$("pAW").value },
    async run(){
-     const start=performance.now(),pop=dataManager.get("population").geojson,all=dataManager.get("facilities").geojson;
-     const hospitals=all.features.filter(f=>f.properties.type==="hospital"),km=Number($("pGapDistance").value);
-     let pw=Number($("pPW").value),aw=Number($("pAW").value);const tw=(pw+aw)||100;pw/=tw;aw/=tw;
-     const merged=unionBuffers(hospitals,km),grid=buildGrid(pop,5),maxPop=Math.max(...grid.features.map(f=>f.properties.population),1);
-     grid.features.forEach(cell=>{const ps=cell.properties.population/maxPop,ag=merged&&turf.booleanPointInPolygon(turf.centroid(cell),merged)?0:1;cell.properties.score=ps*pw+ag*aw});
-     const vals=grid.features.map(f=>f.properties.score);grid.features.forEach(f=>f.properties.class=quantileClass(vals,f.properties.score));
-     let total=0,served=0;pop.features.forEach(p=>{const v=Number(p.properties.population||0);total+=v;if(merged&&turf.booleanPointInPolygon(p,merged))served+=v});
-     const coverage=total?served/total*100:0,critical=grid.features.filter(f=>f.properties.class===4&&f.properties.population>0).length,maxScore=Math.max(...vals,0);
-     return resultBase(this,grid,total,coverage,critical,performance.now()-start,
-       {"Population Weight":Math.round(pw*100)+"%","Accessibility Weight":Math.round(aw*100)+"%","Reference Coverage":km+" km","Maximum Gap Score":maxScore.toFixed(2)},
-       `The Urban Service Gap Index identifies ${critical} critical grid units where population pressure overlaps with service-access deficiency. These areas are priority candidates for detailed planning review. Production scoring should later include actual facility capacity, network travel time, PBT boundaries and statutory planning context.`,
-       "Weighted population pressure + accessibility deficiency index");
+    const start=performance.now(),pop=dataManager.get("population").geojson,all=dataManager.get("facilities").geojson,hospitals=all.features.filter(f=>f.properties.type==="hospital"),km=Number($("pGapDistance").value);
+    let pw=Number($("pPW").value),aw=Number($("pAW").value);const tw=(pw+aw)||100;pw/=tw;aw/=tw;const merged=unionBuffers(hospitals,km),grid=buildGrid(pop,5),maxPop=Math.max(...grid.features.map(f=>f.properties.population),1);
+    grid.features.forEach(cell=>{const ps=cell.properties.population/maxPop,ag=merged&&turf.booleanPointInPolygon(turf.centroid(cell),merged)?0:1;cell.properties.score=ps*pw+ag*aw});const vals=grid.features.map(f=>f.properties.score);grid.features.forEach(f=>f.properties.class=quantileClass(vals,f.properties.score));
+    let total=0,served=0;pop.features.forEach(p=>{const v=Number(p.properties.population||0);total+=v;if(merged&&turf.booleanPointInPolygon(p,merged))served+=v});const coverage=total?served/total*100:0,critical=grid.features.filter(f=>f.properties.class===4&&f.properties.population>0).length,maxScore=Math.max(...vals,0);
+    return resultBase(this,grid,total,coverage,critical,performance.now()-start,{"Population Weight":Math.round(pw*100)+"%","Accessibility Weight":Math.round(aw*100)+"%","Reference Coverage":km+" km","Maximum Gap Score":maxScore.toFixed(2)},`The Urban Service Gap Index identifies ${critical} critical grid units where population pressure overlaps with service-access deficiency. These are priority areas for detailed planning review.`,["Review critical cells against PBT development plans","Check actual facility capacity and travel time","Use result as screening layer for investment prioritisation"],"Weighted population pressure + accessibility deficiency index");
    }
  }
 };
-function resultBase(module,geojson,total,coverage,critical,execution,stats,ai,method){
- const counts=[1,2,3,4].map(c=>geojson.features.filter(f=>f.properties.class===c).length);
- return{type:currentAnalysis,label:module.label,geojson,total,coverage,critical,units:geojson.features.length,executionMs:Math.round(execution),timestamp:Date.now(),classCounts:counts,statistics:stats,aiInsight:ai,metadata:{input:"Synthetic Phase 1 demo datasets",method,crs:"WGS84 / EPSG:4326",engineVersion:CONFIG.version}};
-}
+function resultBase(module,geojson,total,coverage,critical,execution,stats,ai,actions,method){const counts=[1,2,3,4].map(c=>geojson.features.filter(f=>f.properties.class===c).length);return{type:currentAnalysis,label:module.label,geojson,total,coverage,critical,units:geojson.features.length,executionMs:Math.round(execution),timestamp:Date.now(),classCounts:counts,statistics:stats,aiInsight:ai,actions,metadata:{input:"Synthetic Phase 1 demo datasets",method,crs:"WGS84 / EPSG:4326",engineVersion:CONFIG.version,confidence:"Prototype / validation mode"}}}
 
-/* ==========================================================
-   MAP / RESULT MANAGER
-========================================================== */
+/* Map */
 const map=L.map("map",{zoomControl:false}).setView(CONFIG.home,CONFIG.zoom);
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"&copy; OpenStreetMap contributors"}).addTo(map);
-L.control.zoom({position:"topright"}).addTo(map);
-map.on("mousemove",e=>$("coord").textContent=e.latlng.lng.toFixed(4)+", "+e.latlng.lat.toFixed(4));
+const osm=L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"&copy; OpenStreetMap contributors"});
+const topo=L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",{maxZoom:17,attribution:"Map data &copy; OpenStreetMap contributors, SRTM | Map style &copy; OpenTopoMap"});
+let currentBase=osm;osm.addTo(map);L.control.zoom({position:"topright"}).addTo(map);map.on("mousemove",e=>$("coord").textContent=e.latlng.lng.toFixed(4)+", "+e.latlng.lat.toFixed(4));
 
 let populationLayer=L.geoJSON(population,{pointToLayer:(f,ll)=>L.circleMarker(ll,{radius:Math.max(2,Math.min(7,Number(f.properties.population||0)/3000)),color:"#d9edff",weight:.45,fillColor:"#58a6ff",fillOpacity:.3})}).addTo(map);
 let resultLayer=null,facilityLayer=null,bufferLayer=null,importLayer=null,currentResult=null,currentAnalysis="population-density";
 
+/* Measure */
+let measureMode=false,measurePts=[],measureLine=null;
+map.on("click",e=>{if(!measureMode)return;measurePts.push([e.latlng.lng,e.latlng.lat]);if(measurePts.length===2){const line=turf.lineString(measurePts),km=turf.length(line,{units:"kilometers"});if(measureLine)map.removeLayer(measureLine);measureLine=L.polyline(measurePts.map(p=>[p[1],p[0]]),{color:"#ffd166",weight:3}).addTo(map);$("measureBox").textContent="Distance: "+km.toFixed(2)+" km · click MEA to exit";measurePts=[]}});
+
 function clearMapResults(){[resultLayer,facilityLayer,bufferLayer].forEach(l=>{if(l&&map.hasLayer(l))map.removeLayer(l)});resultLayer=facilityLayer=bufferLayer=null}
-function renderMapResult(r){
- clearMapResults();
- resultLayer=L.geoJSON(r.geojson,{style:f=>({color:"#d9edff",weight:.35,fillColor:COLORS[f.properties.class]||"#64748b",fillOpacity:.58}),onEachFeature:(f,l)=>{const p=f.properties;l.bindPopup(`<b>Analysis Unit</b><br>Population: ${Number(p.population||0).toLocaleString()}<br>Class: ${p.class||"-"}${p.score!==undefined?`<br>Score: ${Number(p.score).toFixed(2)}`:""}`)}}).addTo(map);
- if(r.buffer)bufferLayer=L.geoJSON(r.buffer,{style:{color:"#38bdf8",weight:2,fillOpacity:.04}}).addTo(map);
- if(r.facilities)facilityLayer=L.geoJSON(r.facilities,{pointToLayer:(f,ll)=>L.circleMarker(ll,{radius:5,color:"#0ea5e9",weight:2,fillColor:"#fff",fillOpacity:1})}).addTo(map);
-}
+function renderMapResult(r){clearMapResults();resultLayer=L.geoJSON(r.geojson,{style:f=>({color:"#d9edff",weight:.35,fillColor:COLORS[f.properties.class]||"#64748b",fillOpacity:.58}),onEachFeature:(f,l)=>{const p=f.properties;l.bindPopup(`<b>Analysis Unit</b><br>Population: ${Number(p.population||0).toLocaleString()}<br>Class: ${p.class||"-"}${p.score!==undefined?`<br>Score: ${Number(p.score).toFixed(2)}`:""}`)}}).addTo(map);if(r.buffer)bufferLayer=L.geoJSON(r.buffer,{style:{color:"#38bdf8",weight:2,fillOpacity:.04}}).addTo(map);if(r.facilities)facilityLayer=L.geoJSON(r.facilities,{pointToLayer:(f,ll)=>L.circleMarker(ll,{radius:5,color:"#0ea5e9",weight:2,fillColor:"#fff",fillOpacity:1})}).addTo(map)}
 function renderResultUI(r){
  $("kpiPopulation").textContent=compact(r.total);$("kpiCoverage").textContent=r.coverage==null?"—":r.coverage.toFixed(1)+"%";$("kpiCritical").textContent=r.critical.toLocaleString();$("kpiUnits").textContent=r.units.toLocaleString();$("kpiExecution").textContent=r.executionMs+" ms";
- $("statistics").innerHTML=Object.entries(r.statistics).map(([k,v])=>`<b>${k}:</b> ${v}<br>`).join("");
- $("aiInsight").textContent=r.aiInsight;
- $("metadata").innerHTML=Object.entries(r.metadata).map(([k,v])=>`<b>${k}:</b> ${v}<br>`).join("");
- const chart=$("chart");chart.innerHTML="";const max=Math.max(...r.classCounts,1);
- ["Low","Moderate","High","Critical"].forEach((label,i)=>{const col=document.createElement("div");col.className="chart-col";col.innerHTML=`<div class="chart-bar" style="height:${Math.max(5,r.classCounts[i]/max*110)}px"></div><b>${r.classCounts[i]}</b><br>${label}`;chart.appendChild(col)});
- ["exportGeoJSON","exportReport","send3D"].forEach(id=>$(id).disabled=false);
+ $("statistics").innerHTML=Object.entries(r.statistics).map(([k,v])=>`<b>${k}:</b> ${v}<br>`).join("");$("aiInsight").textContent=r.aiInsight;$("metadata").innerHTML=Object.entries(r.metadata).map(([k,v])=>`<b>${k}:</b> ${v}<br>`).join("");
+ $("aiActions").innerHTML=r.actions.map(x=>`<li>${x}</li>`).join("");
+ const chart=$("chart");chart.innerHTML="";const max=Math.max(...r.classCounts,1);["Low","Moderate","High","Critical"].forEach((label,i)=>{const col=document.createElement("div");col.className="chart-col";col.innerHTML=`<div class="chart-bar" style="height:${Math.max(5,r.classCounts[i]/max*125)}px"></div><b>${r.classCounts[i]}</b><br>${label}`;chart.appendChild(col)});
+ const sum=r.classCounts.reduce((a,b)=>a+b,0)||1,c1=r.classCounts[0]/sum*100,c2=(r.classCounts[0]+r.classCounts[1])/sum*100,c3=(r.classCounts[0]+r.classCounts[1]+r.classCounts[2])/sum*100;
+ $("donut").style.background=`conic-gradient(#2563eb 0 ${c1}%,#22c55e ${c1}% ${c2}%,#f59e0b ${c2}% ${c3}%,#ef4444 ${c3}% 100%)`;$("donutLabel").innerHTML=`${r.units}<br>units`;
+ ["exportGeoJSON","exportReport","send3D"].forEach(id=>$(id).disabled=false);["step1","step2","step3","step4","step5"].forEach(id=>$(id).classList.add("done"));
 }
-function resetResultUI(){
- ["kpiPopulation","kpiCoverage","kpiCritical","kpiUnits","kpiExecution"].forEach(id=>$(id).textContent="—");
- $("statistics").textContent="Run an analysis to calculate statistics.";$("chart").innerHTML="";$("aiInsight").textContent="Run an analysis to generate spatial interpretation.";$("metadata").textContent="No analysis metadata yet.";
- ["exportGeoJSON","exportReport","send3D"].forEach(id=>$(id).disabled=true);
-}
+function resetResultUI(){["kpiPopulation","kpiCoverage","kpiCritical","kpiUnits","kpiExecution"].forEach(id=>$(id).textContent="—");$("statistics").textContent="Run an analysis to calculate statistics.";$("chart").innerHTML="";$("aiInsight").textContent="Run an analysis to generate spatial interpretation.";$("aiActions").innerHTML="<li>No recommendations yet.</li>";$("metadata").textContent="No analysis metadata yet.";$("donutLabel").textContent="No result";$("donut").style.background="conic-gradient(#1d3342 0 100%)";["exportGeoJSON","exportReport","send3D"].forEach(id=>$(id).disabled=true);["step1","step2","step3","step4","step5"].forEach(id=>$(id).classList.remove("done","running"))}
 
-/* ==========================================================
-   WORKFLOW MANAGER
-========================================================== */
+/* Workflow */
 async function runWorkflow(){
  const btn=$("runBtn"),module=modules[currentAnalysis];if(!module)return;
- btn.disabled=true;btn.textContent="Processing...";$("processLog").innerHTML="";$("progressBar").style.width="0%";
- const steps=["Validating input layers","Preparing spatial workspace","Building spatial index","Executing analysis model","Calculating statistics","Generating urban-planning insight"];
+ btn.disabled=true;btn.textContent="Processing...";$("processLog").innerHTML="";$("progressBar").style.width="0%";["step1","step2","step3","step4","step5"].forEach(id=>$(id).classList.remove("done","running"));$("step1").classList.add("done");$("step2").classList.add("done");$("step3").classList.add("running");
+ const steps=["Validating input layers","Preparing spatial workspace","Building spatial index","Executing analysis model","Calculating statistics","Generating charts","Building urban-planning AI insight"];
  try{
-   for(let i=0;i<steps.length;i++){
-     $("processStatus").textContent=steps[i];$("mapState").textContent=steps[i];$("progressBar").style.width=Math.round((i+1)/steps.length*88)+"%";
-     const d=document.createElement("div");d.textContent="• "+steps[i];$("processLog").appendChild(d);await sleep(210);
-   }
-   const r=await module.run();currentResult=r;renderMapResult(r);renderResultUI(r);
-   $("progressBar").style.width="100%";$("processStatus").textContent="Analysis completed successfully.";$("mapState").textContent="Analysis Completed";
-   const d=document.createElement("div");d.className="done";d.textContent="✓ Analysis completed";$("processLog").appendChild(d);
-   historyManager.add({label:r.label,timestamp:r.timestamp,type:r.type});renderHistory();toast("Analysis completed.");
+  for(let i=0;i<steps.length;i++){const msg=steps[i];$("processStatus").textContent=msg;$("mapState").textContent=msg;$("progressBar").style.width=Math.round((i+1)/steps.length*90)+"%";const d=document.createElement("div");d.textContent="• "+msg;$("processLog").appendChild(d);$("processLog").scrollTop=$("processLog").scrollHeight;await sleep(190)}
+  const r=await module.run();currentResult=r;renderMapResult(r);renderResultUI(r);$("progressBar").style.width="100%";$("processStatus").textContent="Analysis completed successfully.";$("mapState").textContent="Analysis Completed";$("step3").classList.remove("running");$("step3").classList.add("done");const d=document.createElement("div");d.className="done";d.textContent="✓ Analysis completed";$("processLog").appendChild(d);historyManager.add({label:r.label,timestamp:r.timestamp,type:r.type});renderHistory();toast("Analysis completed.");
  }catch(e){console.error(e);$("processStatus").textContent="Analysis failed.";$("mapState").textContent="Analysis Failed";toast("Analysis failed.");}
  finally{btn.disabled=false;btn.textContent="Run Analysis"}
 }
 
-/* ==========================================================
-   UI / ANALYSIS MANAGER
-========================================================== */
-function selectAnalysis(id){
- const m=modules[id];if(!m)return;currentAnalysis=id;
- document.querySelectorAll(".tool[data-analysis]").forEach(b=>b.classList.toggle("active",b.dataset.analysis===id));
- $("title").textContent=m.label;$("subtitle").textContent=m.subtitle;$("inputPanel").innerHTML=m.inputs();$("parameterPanel").innerHTML=m.params();if(m.bind)m.bind();
- $("processStatus").textContent="Ready to run.";$("processLog").innerHTML="";$("progressBar").style.width="0%";$("mapState").textContent="Workspace Ready";
-}
-function renderLayers(){
- $("layerList").innerHTML=dataManager.list().map(l=>`<div class="data-row"><span>${l.name}</span><em class="ok">${l.status}</em></div>`).join("");
-}
-function renderHistory(){
- const a=historyManager.items;$("historyList").innerHTML=a.length?a.map(h=>`<div class="history-item"><span>Completed</span><b>${h.label}</b><small>${new Date(h.timestamp).toLocaleString()}</small></div>`).join(""):`<div style="font-size:8px;color:#66879b">No analysis history yet.</div>`;
-}
-document.querySelectorAll(".tool[data-analysis]").forEach(b=>b.onclick=()=>selectAnalysis(b.dataset.analysis));
+/* UI */
+function selectAnalysis(id){const m=modules[id];if(!m)return;currentAnalysis=id;document.querySelectorAll(".tool[data-analysis]").forEach(b=>b.classList.toggle("active",b.dataset.analysis===id));$("title").textContent=m.label;$("subtitle").textContent=m.subtitle;$("inputPanel").innerHTML=m.inputs();$("parameterPanel").innerHTML=m.params();if(m.bind)m.bind();$("processStatus").textContent="Ready to run.";$("processLog").innerHTML="";$("progressBar").style.width="0%";$("mapState").textContent="Workspace Ready";resetResultUI()}
+function renderLayers(){$("layerList").innerHTML=dataManager.list().map(l=>`<div class="data-row"><span>${l.name}</span><em class="ok">${l.status}</em></div>`).join("")}
+function renderHistory(){const a=historyManager.items;$("historyList").innerHTML=a.length?a.map(h=>`<div class="history-item"><span>Completed</span><b>${h.label}</b><small>${new Date(h.timestamp).toLocaleString()}</small></div>`).join(""):`<div style="font-size:8px;color:#66879b">No analysis history yet.</div>`}
+function showInfo(id){const m=modules[id];if(!m)return;const i=m.info;$("modalContent").innerHTML=`<h3>${m.label}</h3><table><tr><td><b>Purpose</b></td><td>${i.purpose}</td></tr><tr><td><b>Input</b></td><td>${i.input}</td></tr><tr><td><b>Output</b></td><td>${i.output}</td></tr><tr><td><b>Method</b></td><td>${i.method}</td></tr><tr><td><b>Planning Use</b></td><td>${i.planning}</td></tr></table><p>This module is part of the SUO Spatial Analytics Engine Analysis Catalog.</p>`;$("modalBack").classList.add("show")}
+function showArchitecture(){$("modalContent").innerHTML=`<h3>SUO Spatial Analytics Engine v4.0</h3><p>Enterprise core architecture:</p><ul><li><b>Data Manager</b> — layer registration and GeoJSON import.</li><li><b>Analysis Manager</b> — modular analytical models.</li><li><b>Workflow Manager</b> — validation, processing and job-state reporting.</li><li><b>Result Manager</b> — map outputs, KPIs, statistics and charts.</li><li><b>History Manager</b> — recent analysis jobs in browser storage.</li><li><b>Export Manager</b> — GeoJSON and analysis report export.</li><li><b>Urban Planning AI</b> — decision-support interpretation and recommended actions.</li><li><b>GeoPortal Handoff</b> — prepared for connection to the SUO 3D GeoPortal.</li></ul><p>Current Phase 1 datasets remain synthetic for engine validation. Production deployment should connect verified DOSM/SUO datasets.</p>`;$("modalBack").classList.add("show")}
+
+document.querySelectorAll(".tool[data-analysis]").forEach(b=>b.addEventListener("click",e=>{if(e.target.classList.contains("info-btn"))return;selectAnalysis(b.dataset.analysis)}));
+document.querySelectorAll(".info-btn").forEach(b=>b.onclick=e=>{e.stopPropagation();showInfo(b.dataset.info)});
 document.querySelectorAll(".left-tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".left-tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".left-body").forEach(x=>x.classList.remove("active"));b.classList.add("active");$("left-"+b.dataset.left).classList.add("active")});
 document.querySelectorAll(".result-tab").forEach(b=>b.onclick=()=>{document.querySelectorAll(".result-tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".result-view").forEach(x=>x.classList.remove("active"));b.classList.add("active");$("result-"+b.dataset.result).classList.add("active")});
 $("analysisSearch").oninput=e=>{const q=e.target.value.toLowerCase();document.querySelectorAll(".tool").forEach(t=>t.style.display=t.textContent.toLowerCase().includes(q)?"flex":"none")};
-$("runBtn").onclick=runWorkflow;
-$("homeBtn").onclick=()=>map.setView(CONFIG.home,CONFIG.zoom);
+$("runBtn").onclick=runWorkflow;$("homeBtn").onclick=()=>map.setView(CONFIG.home,CONFIG.zoom);
 $("populationToggle").onclick=e=>{if(map.hasLayer(populationLayer)){map.removeLayer(populationLayer);e.currentTarget.classList.remove("active")}else{populationLayer.addTo(map);e.currentTarget.classList.add("active")}};
 $("resultToggle").onclick=e=>{if(!resultLayer)return;if(map.hasLayer(resultLayer)){map.removeLayer(resultLayer);e.currentTarget.classList.remove("active")}else{resultLayer.addTo(map);e.currentTarget.classList.add("active")}};
+$("basemapBtn").onclick=()=>{map.removeLayer(currentBase);currentBase=currentBase===osm?topo:osm;currentBase.addTo(map);toast(currentBase===osm?"OpenStreetMap basemap":"Topographic basemap")};
+$("locateBtn").onclick=()=>{if(!navigator.geolocation)return toast("Geolocation not supported.");navigator.geolocation.getCurrentPosition(p=>{map.setView([p.coords.latitude,p.coords.longitude],13);L.circleMarker([p.coords.latitude,p.coords.longitude],{radius:6,color:"#ffd166",fillColor:"#ffd166",fillOpacity:1}).addTo(map).bindPopup("Current location").openPopup()},()=>toast("Location permission unavailable."))};
+$("measureBtn").onclick=e=>{measureMode=!measureMode;e.currentTarget.classList.toggle("active",measureMode);$("measureBox").classList.toggle("show",measureMode);$("measureBox").textContent=measureMode?"Measure mode: click two points on map.":"Measure mode off";if(!measureMode&&measureLine){map.removeLayer(measureLine);measureLine=null}};
+$("fullscreenBtn").onclick=()=>{const el=$("mapWrap");if(!document.fullscreenElement)el.requestFullscreen?.();else document.exitFullscreen?.()};
+$("printBtn").onclick=()=>window.print();
 $("clearResult").onclick=()=>{currentResult=null;clearMapResults();resetResultUI();toast("Result cleared.")};
 $("resetWorkspace").onclick=()=>{currentResult=null;clearMapResults();resetResultUI();selectAnalysis("population-density");map.setView(CONFIG.home,CONFIG.zoom);toast("Workspace reset.")};
 $("clearHistory").onclick=()=>{historyManager.clear();renderHistory();toast("History cleared.")};
 $("exportGeoJSON").onclick=()=>currentResult&&download("SUO_"+currentResult.type+"_result.geojson",JSON.stringify(currentResult.geojson,null,2),"application/geo+json");
-$("exportReport").onclick=()=>{if(!currentResult)return;const r=currentResult;download("SUO_"+r.type+"_report.txt",[
-"SELANGOR URBAN OBSERVATORY","SPATIAL ANALYTICS ENGINE v3.0","",`Analysis: ${r.label}`,`Date: ${new Date(r.timestamp).toLocaleString()}`,`Population: ${Math.round(r.total).toLocaleString()}`,`Coverage: ${r.coverage==null?"N/A":r.coverage.toFixed(1)+"%"}`,`Critical Areas: ${r.critical}`,`Analysis Units: ${r.units}`,`Execution: ${r.executionMs} ms`,"","URBAN PLANNING AI INSIGHT",r.aiInsight,"","NOTE","Phase 1 prototype currently uses synthetic demo datasets."
-].join("\n"),"text/plain")};
-$("send3D").onclick=()=>toast("GeoPortal handoff prepared; production URL/API will be connected next.");
-$("openGeoportal").onclick=()=>{if(CONFIG.geoportalUrl)window.open(CONFIG.geoportalUrl,"_blank");else toast("Set production 3D GeoPortal URL in CONFIG.geoportalUrl.")};
-$("aboutBtn").onclick=()=>$("modalBack").classList.add("show");
-$("modalClose").onclick=()=>$("modalBack").classList.remove("show");
-$("modalBack").onclick=e=>{if(e.target===$("modalBack"))$("modalBack").classList.remove("show")};
+$("exportReport").onclick=()=>{if(!currentResult)return;const r=currentResult;download("SUO_"+r.type+"_report.txt",["SELANGOR URBAN OBSERVATORY","SPATIAL ANALYTICS ENGINE v4.0 FINAL","",`Analysis: ${r.label}`,`Date: ${new Date(r.timestamp).toLocaleString()}`,`Population: ${Math.round(r.total).toLocaleString()}`,`Coverage: ${r.coverage==null?"N/A":r.coverage.toFixed(1)+"%"}`,`Critical Areas: ${r.critical}`,`Analysis Units: ${r.units}`,`Execution: ${r.executionMs} ms`,"","URBAN PLANNING AI INSIGHT",r.aiInsight,"","RECOMMENDED ACTIONS",...r.actions.map((x,i)=>`${i+1}. ${x}`),"","NOTE","Prototype Phase 1 uses synthetic datasets. Replace with verified SUO/DOSM data before production."].join("\n"),"text/plain")};
+$("send3D").onclick=()=>toast("GeoPortal handoff is prepared; configure production URL/API next.");
+$("openGeoportal").onclick=()=>CONFIG.geoportalUrl?window.open(CONFIG.geoportalUrl,"_blank"):toast("Set production 3D GeoPortal URL in CONFIG.geoportalUrl.");
+$("architectureBtn").onclick=showArchitecture;$("modalClose").onclick=()=>$("modalBack").classList.remove("show");$("modalBack").onclick=e=>{if(e.target===$("modalBack"))$("modalBack").classList.remove("show")};
 
-$("fileInput").onchange=e=>{
- const file=e.target.files[0];if(!file)return;const reader=new FileReader();
- reader.onload=()=>{try{const gj=JSON.parse(reader.result),id="import-"+Date.now();dataManager.import(id,file.name,gj);if(importLayer&&map.hasLayer(importLayer))map.removeLayer(importLayer);importLayer=L.geoJSON(gj,{style:{color:"#a78bfa",weight:1.4,fillOpacity:.08}}).addTo(map);renderLayers();toast("GeoJSON imported.")}catch(err){toast("Invalid GeoJSON file.")}};
- reader.readAsText(file);
-};
+$("fileInput").onchange=e=>{const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const gj=JSON.parse(reader.result),id="import-"+Date.now();dataManager.import(id,file.name,gj);if(importLayer&&map.hasLayer(importLayer))map.removeLayer(importLayer);importLayer=L.geoJSON(gj,{style:{color:"#a78bfa",weight:1.4,fillOpacity:.08}}).addTo(map);renderLayers();toast("GeoJSON imported.")}catch(err){toast("Invalid GeoJSON file.")}};reader.readAsText(file)};
 
-/* Init */
 renderLayers();renderHistory();selectAnalysis("population-density");
 })();
 </script>
