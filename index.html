@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SUO Spatial Analytics Engine</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">SUO</div>
+      <div>
+        <h1>Spatial Analytics</h1>
+        <small>Selangor Urban Observatory</small>
+      </div>
+    </div>
+
+    <div class="section-title">ANALYSIS CATALOG</div>
+
+    <button class="tool active" data-tool="density">
+      <span>01</span>
+      <div><b>Population Density</b><small>Grid-based population analysis</small></div>
+    </button>
+
+    <button class="tool" data-tool="access">
+      <span>02</span>
+      <div><b>Facility Accessibility</b><small>Buffer & service coverage</small></div>
+    </button>
+
+    <button class="tool" data-tool="gap">
+      <span>03</span>
+      <div><b>Urban Service Gap</b><small>Population vs facility gap</small></div>
+    </button>
+
+    <div class="section-title">DATA</div>
+    <label class="upload">
+      Import GeoJSON
+      <input id="geojsonUpload" type="file" accept=".geojson,.json" hidden />
+    </label>
+
+    <button class="secondary" id="resetBtn">Reset Workspace</button>
+  </aside>
+
+  <main class="workspace">
+    <header class="topbar">
+      <div>
+        <h2 id="workspaceTitle">Population Density</h2>
+        <p id="workspaceDesc">Analyse population concentration using spatial grid units.</p>
+      </div>
+      <div class="status"><span></span> Engine Ready</div>
+    </header>
+
+    <div class="content-grid">
+      <section class="map-panel">
+        <div id="map"></div>
+        <div class="map-tag">SUO SPATIAL ANALYTICS ENGINE · PHASE 1</div>
+      </section>
+
+      <section class="control-panel">
+        <div class="panel-card">
+          <h3>Analysis Parameters</h3>
+
+          <div id="densityControls" class="controls">
+            <label>Grid Size
+              <select id="gridSize">
+                <option value="2">2 km</option>
+                <option value="5" selected>5 km</option>
+                <option value="10">10 km</option>
+              </select>
+            </label>
+          </div>
+
+          <div id="accessControls" class="controls hidden">
+            <label>Facility Type
+              <select id="facilityType">
+                <option value="hospital">Hospital</option>
+                <option value="school">School</option>
+                <option value="police">Police</option>
+              </select>
+            </label>
+            <label>Coverage Distance
+              <select id="bufferDistance">
+                <option value="1">1 km</option>
+                <option value="3" selected>3 km</option>
+                <option value="5">5 km</option>
+                <option value="10">10 km</option>
+              </select>
+            </label>
+          </div>
+
+          <div id="gapControls" class="controls hidden">
+            <label>Population Weight
+              <input id="popWeight" type="range" min="0" max="100" value="60">
+              <span id="popWeightValue">60%</span>
+            </label>
+            <label>Accessibility Weight
+              <input id="accessWeight" type="range" min="0" max="100" value="40">
+              <span id="accessWeightValue">40%</span>
+            </label>
+          </div>
+
+          <button class="run" id="runBtn">Run Analysis</button>
+        </div>
+
+        <div class="panel-card">
+          <h3>Result Summary</h3>
+          <div class="kpi-grid">
+            <div class="kpi"><strong id="kpiPopulation">—</strong><span>Population</span></div>
+            <div class="kpi"><strong id="kpiCoverage">—</strong><span>Coverage</span></div>
+            <div class="kpi"><strong id="kpiCritical">—</strong><span>Critical Areas</span></div>
+            <div class="kpi"><strong id="kpiUnits">—</strong><span>Analysis Units</span></div>
+          </div>
+        </div>
+
+        <div class="panel-card">
+          <div class="card-head">
+            <h3>Urban Intelligence</h3>
+            <button class="mini" id="exportBtn" disabled>Export GeoJSON</button>
+          </div>
+          <p id="insight">Run an analysis to generate spatial intelligence.</p>
+        </div>
+
+        <div class="panel-card">
+          <h3>Legend</h3>
+          <div class="legend"><i class="c1"></i> Low</div>
+          <div class="legend"><i class="c2"></i> Moderate</div>
+          <div class="legend"><i class="c3"></i> High</div>
+          <div class="legend"><i class="c4"></i> Critical</div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@turf/turf@7/turf.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

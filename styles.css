@@ -1,0 +1,44 @@
+
+:root{
+  --bg:#07111c; --panel:#0c1b2a; --panel2:#10273a; --line:#24445d;
+  --text:#edf7ff; --muted:#8ca6ba; --accent:#ffb000; --accent2:#ff7a00;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,select,input{font:inherit}
+.app-shell{display:grid;grid-template-columns:280px 1fr;height:100vh}
+.sidebar{padding:18px;background:#081522;border-right:1px solid var(--line);overflow:auto}
+.brand{display:flex;gap:10px;align-items:center;margin-bottom:24px}
+.logo{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-weight:900;color:#111;background:linear-gradient(135deg,var(--accent),var(--accent2))}
+.brand h1{font-size:16px;margin:0}.brand small{color:var(--muted)}
+.section-title{font-size:10px;color:#6f8799;letter-spacing:.14em;margin:18px 0 8px}
+.tool{width:100%;display:flex;gap:10px;text-align:left;border:1px solid transparent;background:transparent;color:var(--text);padding:11px;border-radius:11px;cursor:pointer;margin-bottom:6px}
+.tool span{width:26px;height:26px;border-radius:8px;background:#132d42;display:grid;place-items:center;font-size:10px;color:#a9c5d9}
+.tool b{display:block;font-size:12px}.tool small{display:block;color:var(--muted);font-size:10px;margin-top:3px}
+.tool.active{background:#10273a;border-color:#31536e}.tool.active span{background:var(--accent);color:#111}
+.upload,.secondary{display:block;width:100%;padding:10px;border-radius:9px;text-align:center;cursor:pointer}
+.upload{background:#10273a;border:1px dashed #46657d;color:#dbeaff}
+.secondary{margin-top:8px;background:#0a1824;border:1px solid #27455d;color:#c6d9e7}
+.workspace{min-width:0;display:flex;flex-direction:column}
+.topbar{height:72px;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);background:#091725}
+.topbar h2{font-size:17px;margin:0}.topbar p{margin:4px 0 0;color:var(--muted);font-size:11px}
+.status{font-size:10px;color:#a9c5d9}.status span{display:inline-block;width:7px;height:7px;border-radius:50%;background:#2fbf71;margin-right:6px}
+.content-grid{display:grid;grid-template-columns:minmax(0,1fr) 360px;min-height:0;flex:1}
+.map-panel{position:relative;min-height:500px}.map-tag{position:absolute;left:14px;bottom:14px;z-index:500;background:rgba(7,17,28,.86);border:1px solid #31536e;padding:7px 9px;border-radius:8px;font-size:9px}
+#map{height:100%;width:100%;background:#0b1722}
+.control-panel{padding:12px;overflow:auto;background:#091725;border-left:1px solid var(--line)}
+.panel-card{background:#0e2132;border:1px solid #24445d;border-radius:13px;padding:13px;margin-bottom:10px}
+.panel-card h3{font-size:12px;margin:0 0 10px}
+.controls label{display:block;font-size:10px;color:var(--muted);margin-bottom:10px}
+select{width:100%;margin-top:5px;padding:9px;background:#071521;border:1px solid #31536e;border-radius:8px;color:var(--text)}
+input[type=range]{width:100%;margin-top:7px}
+.hidden{display:none}
+.run{width:100%;border:0;border-radius:9px;padding:11px;font-weight:900;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#111;cursor:pointer}
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}.kpi{padding:9px;background:#071521;border:1px solid #203d53;border-radius:9px}
+.kpi strong{display:block;font-size:18px}.kpi span{font-size:9px;color:var(--muted)}
+#insight{font-size:11px;line-height:1.55;color:#d5e6f2;margin:0;background:#071521;border-left:3px solid var(--accent);padding:9px;border-radius:8px}
+.legend{font-size:10px;color:#c8dae7;margin:6px 0}.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:7px;vertical-align:-1px}
+.c1{background:#2563eb}.c2{background:#22c55e}.c3{background:#f59e0b}.c4{background:#ef4444}
+.card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.mini{font-size:9px;padding:6px 8px;border-radius:7px;border:1px solid #31536e;background:#10273a;color:#dcecf7;cursor:pointer}.mini:disabled{opacity:.4;cursor:not-allowed}
+.leaflet-container{background:#0b1722}
+@media(max-width:1050px){.app-shell{grid-template-columns:220px 1fr}.content-grid{grid-template-columns:1fr}.control-panel{border-left:0;border-top:1px solid var(--line)}.map-panel{height:58vh}}
