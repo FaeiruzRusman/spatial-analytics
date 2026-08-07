@@ -1,41 +1,58 @@
-# SUO Spatial Analytics Engine v4.2 — SUO BOUNDARIES
+# SUO Spatial Analytics Engine v5.0 — Production Foundation
 
-Population Density now uses the same district boundary dataset supplied for / used by the SUO GeoPortal.
+## Core decision
+v5.0 removes synthetic Population Density, random population points, synthetic facilities and fake KPIs.
 
-## Embedded SUO spatial data
-- sempadan_daerah_selangor.geojson — 9 district polygons
-- label_daerah_selangor.geojson — 9 district label points
-- sempadan_pbt_selangor_2024.geojson — 12 PBT polygons
-- label_pbt_selangor_2024.geojson — 12 PBT label points
+## Operational modules
 
-All four are bundled directly into `index.html` for stable GitHub Pages deployment.
+### 1. DOSM District Population
+Works immediately.
+- Official DOSM/OpenDOSM district population 2020–2025
+- Same 9 district polygons used by SUO GeoPortal
+- district ranking
+- chart
+- planning interpretation
 
-## Population Density
-Population:
-Official bundled DOSM/OpenDOSM district population 2020–2025
+### 2. Facility Accessibility
+Requires an imported verified Point GeoJSON facility layer.
+- Euclidean buffer coverage
+- facility count by district
+- district land-area coverage percentage
+- districts with zero facilities
+- no fake population-served estimate
 
-Geometry:
-SUO district polygons from `sempadan_daerah_selangor.geojson`
+### 3. Urban Service Gap
+Requires an imported verified Point GeoJSON facility layer.
+- official DOSM district population
+- facilities per 100,000 people
+- 55% population-pressure + 45% facility-rate-deficit screening index
+- district priority ranking
 
-Join:
-DOSM district name -> canonical district name -> `web_name`
+### 4. Network Accessibility
+Requires an imported LineString / MultiLineString road network.
+- select origin and destination on map
+- nearest network vertex snapping
+- Dijkstra shortest-distance route
+- route GeoJSON export
+- does not yet apply one-way, speed or turn restrictions
 
-Density:
-population / district area (km²)
+## Bundled SUO data
+- sempadan_daerah_selangor.geojson
+- label_daerah_selangor.geojson
+- sempadan_pbt_selangor_2024.geojson
+- label_pbt_selangor_2024.geojson
+- official DOSM Selangor district totals 2020–2025
 
-The SUO layer `web_area` is converted from hectares to km² (`web_area / 100`).
-Turf geodesic area is retained as fallback if `web_area` is unavailable.
+## Deployment
+Replace repository root `index.html`.
 
-## Result
-- 9 district polygons
-- official DOSM population
-- persons per km²
-- quartile choropleth
-- total population
-- overall density
-- highest / lowest density district
-- map popup: population, area, density
-- same district geometry as SUO GeoPortal
+GitHub Pages:
+https://faeiruzrusman.github.io/spatial-analytics/
 
-## PBT
-The 12-PBT boundary and label datasets are already bundled in v4.2 for the next PBT-level analytics modules.
+## Next integration
+- verified health / police / fire / school point layers
+- road network from the 3D GeoPortal
+- GeoPortal handoff
+- population growth
+- Site Suitability
+- Flood Exposure
