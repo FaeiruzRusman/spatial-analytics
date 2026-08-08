@@ -1,26 +1,37 @@
-# SUO Spatial Analytics Engine v5.1.1 — Real Data Integration
+# SUO Spatial Analytics Engine v5.1.2 — Multimodal Rail Routing
 
-This build extends v5.1 Enterprise UX and bundles the real datasets supplied for the SUO GeoPortal.
+## Fixed
+Previous Network Accessibility routing depended on disconnected rail-line geometries, so routes commonly worked only when origin and destination were on the same rail line/mode.
 
-## Bundled operational datasets
-- Selangor Rail Network: 15 line features
-- Selangor Rail Stations: 234 station points
-- Sekolah Negeri Selangor: 945 school points
-- IPK & IPD Selangor: 17 points
-- Kemudahan Kesihatan Selangor: 87 points
-- SUO District Boundary: 9 districts
-- SUO PBT Boundary 2024: 12 PBT
-- DOSM Selangor District Population 2020–2025
+v5.1.2 routes using the bundled 234 station records as a multimodal transit graph.
 
-## Rail metadata
-Source status: User checked and finalized
-Portal CRS: EPSG:4326
-Exact duplicate station records removed for portal display: 20
+## Graph logic
+- Each line-specific station record is a graph node.
+- Consecutive records on the same `line_name` are connected as ride edges.
+- Records with the same normalized `station_name` but different lines are connected as interchange / transfer edges.
+- Dijkstra finds the lowest-distance-equivalent multimodal path.
+- A configurable transfer penalty discourages unnecessary transfers.
 
-## Behaviour
-Facility Accessibility and Urban Service Gap can now select bundled health, school, police and rail-station point layers directly.
-Network Accessibility can select the bundled rail network directly.
-Additional GeoJSON layers can still be imported through Data Manager.
+## Result
+- rail distance
+- number of transfers
+- number of modes
+- stations in path
+- modes used
+- lines used
+- interchange stations
+- route segments styled by rail mode
+- transfer segments shown as dashed white links
 
-## Data-quality note
-The engine preserves the attributes/status fields in the supplied source data. A bundled dataset being available does not override source-level verification flags such as `PERLU_SEMAKAN`.
+## Supported multimodal combinations
+Where interchange station records exist in the supplied station dataset, routes can combine:
+- MRT
+- LRT
+- KTM Komuter
+- ERL
+- KL Monorail
+- BRT
+
+## Limitation
+This is topology/distance routing.
+It does not yet model timetable, frequency, fare, train speed, waiting time, or verified walking transfers between nearby stations with different names.
