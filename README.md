@@ -1,47 +1,26 @@
-# SUO Spatial Analytics Engine v5.1 — Enterprise UX
+# SUO Spatial Analytics Engine v5.1.1 — Real Data Integration
 
-Built on v5.0 Production Foundation.
+This build extends v5.1 Enterprise UX and bundles the real datasets supplied for the SUO GeoPortal.
 
-## UX improvements
-- `ⓘ About this Analysis` for every active analysis
-- Purpose
-- Input requirements
-- Output
-- Planning applications
-- Workflow diagram
-- Example use case
-- Method
-- Limitations
-- Complexity
-- Confidence / data-quality indication
-- Dynamic result legend
-- Feature count per legend class
-- Click legend class to highlight matching results
-- Analysis-specific interpretation
-- CSV result export
+## Bundled operational datasets
+- Selangor Rail Network: 15 line features
+- Selangor Rail Stations: 234 station points
+- Sekolah Negeri Selangor: 945 school points
+- IPK & IPD Selangor: 17 points
+- Kemudahan Kesihatan Selangor: 87 points
+- SUO District Boundary: 9 districts
+- SUO PBT Boundary 2024: 12 PBT
+- DOSM Selangor District Population 2020–2025
 
-## Legend behaviour
-DOSM District Population:
-- Blue = Very Low Population
-- Green = Low Population
-- Yellow = Moderate Population
-- Red = High Population
+## Rail metadata
+Source status: User checked and finalized
+Portal CRS: EPSG:4326
+Exact duplicate station records removed for portal display: 20
 
-Facility Accessibility:
-- Blue = Very Low Coverage
-- Green = Low Coverage
-- Yellow = Moderate Coverage
-- Red = High Coverage
+## Behaviour
+Facility Accessibility and Urban Service Gap can now select bundled health, school, police and rail-station point layers directly.
+Network Accessibility can select the bundled rail network directly.
+Additional GeoJSON layers can still be imported through Data Manager.
 
-Urban Service Gap:
-- Blue = Low Gap
-- Green = Moderate Gap
-- Yellow = High Gap
-- Red = Critical Gap
-
-Network Accessibility:
-- Yellow = shortest route line
-
-## Production philosophy
-No synthetic population-density module and no random facility dataset.
-Active analysis either uses official bundled data or requires a user-imported verified dataset.
+## Data-quality note
+The engine preserves the attributes/status fields in the supplied source data. A bundled dataset being available does not override source-level verification flags such as `PERLU_SEMAKAN`.
