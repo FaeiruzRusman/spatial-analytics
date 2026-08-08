@@ -1,37 +1,23 @@
-# SUO Spatial Analytics Engine v5.1.2 — Multimodal Rail Routing
+# SUO Spatial Analytics Engine v5.1.2a — HOTFIX
+
+This hotfix fixes the landing-page lock in v5.1.2.
+
+## Root cause
+A malformed JavaScript fragment remained after replacing the route-status function:
+
+`· Destination: ${destLatLng?...}`
+
+That caused the browser to stop parsing the main application script.
+The landing page HTML/CSS still rendered, but none of the workspace button handlers were initialized.
 
 ## Fixed
-Previous Network Accessibility routing depended on disconnected rail-line geometries, so routes commonly worked only when origin and destination were on the same rail line/mode.
+- Removed the malformed JavaScript residue.
+- Preserved the v5.1.2 multimodal rail-routing logic.
+- Validated the final inline JavaScript with `node --check` before packaging.
 
-v5.1.2 routes using the bundled 234 station records as a multimodal transit graph.
-
-## Graph logic
-- Each line-specific station record is a graph node.
-- Consecutive records on the same `line_name` are connected as ride edges.
-- Records with the same normalized `station_name` but different lines are connected as interchange / transfer edges.
-- Dijkstra finds the lowest-distance-equivalent multimodal path.
-- A configurable transfer penalty discourages unnecessary transfers.
-
-## Result
-- rail distance
-- number of transfers
-- number of modes
-- stations in path
-- modes used
-- lines used
-- interchange stations
-- route segments styled by rail mode
-- transfer segments shown as dashed white links
-
-## Supported multimodal combinations
-Where interchange station records exist in the supplied station dataset, routes can combine:
-- MRT
-- LRT
-- KTM Komuter
-- ERL
-- KL Monorail
-- BRT
-
-## Limitation
-This is topology/distance routing.
-It does not yet model timetable, frequency, fare, train speed, waiting time, or verified walking transfers between nearby stations with different names.
+## Expected behaviour
+- Landing page buttons open the workspace.
+- Analysis Toolbox works.
+- Data Manager works.
+- DOSM / Facility / Urban Service Gap modules remain available.
+- Network Accessibility uses multimodal station/interchange routing.
